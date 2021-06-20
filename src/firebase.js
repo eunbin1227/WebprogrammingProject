@@ -1,15 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-//
-// const script = document.createElement('script');
-// script.type = 'text/javascript';
-// script.src = 'https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js';
-// document.body.appendChild(script);
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-var firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyAbjKRUxmvZKALw53A_g50YG4wwupfoxOs",
     authDomain: "wpproject-a2972.firebaseapp.com",
     projectId: "wpproject-a2972",

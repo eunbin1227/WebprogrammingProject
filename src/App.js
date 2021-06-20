@@ -2,7 +2,7 @@ import './App.css';
 import {Component} from "react";
 import {BrowserRouter, Route} from 'react-router-dom';
 import Main from './Main';
-import Login from './Login';
+//import Login from './Login';
 
 
 export default class App extends Component {
@@ -11,7 +11,7 @@ export default class App extends Component {
         <div>
           <BrowserRouter>
             <Route path="/" exact component={Main} />
-            <Route path="/ChooseData" component={Login} />
+            {/*<Route path="/Login" component={Login} />*/}
           </BrowserRouter>
         </div>
     )
