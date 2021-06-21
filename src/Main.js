@@ -75,7 +75,7 @@ export default function Main() {
                 <CssBaseline />
                 <header className={classes.header}>
                     <div><img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img></div>
-                    <Typography variant='h4'>서울대학교 물품거래 커뮤니티</Typography>
+                    <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
                     <div className="login-panel">
                         {login ?
                             <div>
