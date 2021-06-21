@@ -19,11 +19,15 @@ import theme from './theme';
 import {useEffect, useState} from "react";
 import {getPost} from "./Api";
 import {firestore} from "./firebase";
+import { auth } from './firebase';
+
 
 
 export default function Main() {
     const classes = useStyles();
     const [data, setData] = useState([])
+    const [login, setLogin] = useState(undefined);
+    const [name, setName] = useState('');
     useEffect(()=>{
         firestore.collection('post').get().then((querySnapshot) => {
             setData(querySnapshot.docs.map((doc)=>
@@ -32,6 +36,7 @@ export default function Main() {
         })
         console.log(data)
     },[])
+
 
     // const rows = [
     //     { id: 1, col1: 'Test1', col2: '10', col3: '1', col4: '5', col5: '2021년 06월 21일' },
@@ -51,9 +56,34 @@ export default function Main() {
         { field: 'col5', headerName: '최근 활동', width: 300 },
     ];
 
+    useEffect(() => {
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                setLogin(true);
+                setName(user.email.split('@')[0]);
+            } else {
+                // No user is signed in.
+                setLogin(false);
+            }
+        });
+    })
+
     const handleClick = (e) => {
         e.preventDefault();
         console.log('You clicked a breadcrumb.');
+
+    }
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        auth.signOut().then(() => {
+            // Sign-out successful.
+            window.location = '/';
+        }).catch((error) => {
+            // An error happened.
+            alert(error.code);
+        });
     }
 
 
@@ -65,15 +95,29 @@ export default function Main() {
                     <div>Logo</div>
                     <Typography variant='h1'>Title</Typography>
                     <div className="login-panel">
-                        <Button
-                            variant='contained'
-                            color='primary'
-                            startIcon={<AccountCircle />}
-                            component={Link}
-                            to="/Login"
-                        >
-                        Login
-                        </Button>
+                        {login ?
+                            <div>
+                                <Typography> Hello! {name} </Typography>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    startIcon={<AccountCircle />}
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </Button>
+                            </div>
+                            :
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                startIcon={<AccountCircle />}
+                                component={Link}
+                                to="/Login"
+                            >
+                                Login
+                            </Button>
+                        }
                     </div>
                 </header>
                 <div align='center'>
@@ -83,10 +127,6 @@ export default function Main() {
                                 <Button onClick={handleClick}>
                                     메인
                                 </Button>
-                                {/*<Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>*/}
-                                {/*    Core*/}
-                                {/*</Link>*/}
-                                {/*<Typography color="textPrimary">Breadcrumb</Typography>*/}
                             </Breadcrumbs>
                         </Grid>
                     </div>
@@ -105,7 +145,6 @@ export default function Main() {
                     </Grid>
                 </div>
             </div>
-
         </ThemeProvider>
     );
 }
