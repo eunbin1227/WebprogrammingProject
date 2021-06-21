@@ -4,7 +4,9 @@ const db = firestore
 
 const writePost = (collection, contents) =>{
     db.collection(collection).add({
-        contents
+        contents,
+        comment:[],
+        like: []
     })
         .then((docRef) => {
             console.log('Doc written with ID: ', docRef.id);
@@ -24,8 +26,39 @@ const getPost = (collection) => {
     })
 }
 
+const deletePost = (docid) => {
+    db.collection('post').doc(docid).delete().then(() => {
+        console.log('Doc successfully deleted')
+    }).catch((error) => {
+        console.error('Error removing doc: ', error)
+    })
+}
+
+const writeComments = (docid, user, comment) => {
+    db.collection('post').doc(docid).update({
+        comment: firestore.FieldValue.arrayUnion({user: comment})
+    });
+}
+
+const pushLike = (docid, user) => {
+    const docRef = db.collection('post').doc(docid)
+    if (user in docRef.get().data().like){
+        docRef.update({
+            like: firestore.FieldValue.arrayUnion(user)
+        })}
+    else{
+        docRef.update({
+            like: firestore.FieldValue.arrayRemove(user)
+        })
+    }
+
+}
+
 
 export {
     writePost,
     getPost,
+    deletePost,
+    writeComments,
+    pushLike
 }
