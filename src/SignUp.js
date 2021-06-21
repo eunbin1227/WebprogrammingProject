@@ -15,7 +15,7 @@ import {
 import {useState} from "react";
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
-import { firestore, auth } from './firebase';
+import { auth } from './firebase';
 
 
 export default function SignUp() {
@@ -24,10 +24,6 @@ export default function SignUp() {
     const [password, setPassword] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
-        // firestore
-        //     .collection('Test')
-        //     .add({email, password})
-        //     .then()
 
         auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
@@ -39,8 +35,8 @@ export default function SignUp() {
             })
             .catch((error) => {
                 const errorCode = error.code;
-                const errorMessage = error.message;
-                alert(errorMessage);
+                //const errorMessage = error.message;
+                alert(errorCode);
                 // ..
             });
     }
