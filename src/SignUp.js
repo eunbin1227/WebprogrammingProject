@@ -15,6 +15,7 @@ import {
 import {useState} from "react";
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
+import { firestore, auth } from './firebase';
 
 
 export default function SignUp() {
@@ -23,8 +24,25 @@ export default function SignUp() {
     const [password, setPassword] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email);
-        console.log(password);
+        // firestore
+        //     .collection('Test')
+        //     .add({email, password})
+        //     .then()
+
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                alert('회원가입이 완료되었습니다!');
+                window.location = '/Login';
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert(errorMessage);
+                // ..
+            });
     }
 
     return (

@@ -16,7 +16,8 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import {useState} from "react";
 import theme from './theme';
-
+import { auth } from './firebase';
+import { Redirect, Route } from "react-router";
 
 export default function Login() {
     const classes = useStyles();
@@ -24,8 +25,26 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email);
-        console.log(password);
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                console.log(user);
+                window.location = '/';
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                if(errorCode === 'auth/wrong-password') {
+                    alert('비밀번호를 확인해주세요!');
+                }else if (errorCode === 'auth/user-not-found') {
+                    alert('등록되지 않은 사용자입니다.');
+                }else {
+                    alert(errorCode);
+                }
+            });
     }
     return (
         <ThemeProvider theme={theme}>
