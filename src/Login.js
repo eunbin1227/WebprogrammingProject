@@ -14,11 +14,19 @@ import {
     Home
 } from '@material-ui/icons';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import {useState} from "react";
 import theme from './theme';
 
 
 export default function Login() {
     const classes = useStyles();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(email);
+        console.log(password);
+    }
     return (
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
@@ -34,7 +42,7 @@ export default function Login() {
                         <Typography component="h1" variant="h5" className={classes.title}>
                             로그인
                         </Typography>
-                        <form className={classes.form} noValidate>
+                        <form className={classes.form} onSubmit={handleSubmit} noValidate>
                             <TextField
                                 margin="normal"
                                 required
@@ -43,6 +51,7 @@ export default function Login() {
                                 label="이메일"
                                 name="email"
                                 autoComplete="email"
+                                onChange={(e) => {setEmail(e.target.value)}}
                                 autoFocus
                             />
                             <TextField
@@ -53,6 +62,7 @@ export default function Login() {
                                 label="비밀번호"
                                 type="password"
                                 id="password"
+                                onChange={(e) => {setPassword(e.target.value)}}
                                 autoComplete="current-password"
                             />
                             <Button

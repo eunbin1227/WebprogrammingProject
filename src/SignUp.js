@@ -12,12 +12,21 @@ import {
     Home,
     Lock
 } from '@material-ui/icons';
+import {useState} from "react";
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 
 
 export default function SignUp() {
     const classes = useStyles();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(email);
+        console.log(password);
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
@@ -33,31 +42,8 @@ export default function SignUp() {
                         <Typography component="h1" variant="h5" className={classes.title}>
                             회원가입
                         </Typography>
-                        <form className={classes.form} noValidate>
+                        <form className={classes.form} onSubmit={handleSubmit} noValidate>
                             <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        autoComplete="fname"
-                                        name="firstName"
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="firstName"
-                                        label="성"
-                                        autoFocus
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="lastName"
-                                        label="이름"
-                                        name="lastName"
-                                        autoComplete="lname"
-                                    />
-                                </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         variant="outlined"
@@ -67,6 +53,7 @@ export default function SignUp() {
                                         label="이메일"
                                         name="email"
                                         autoComplete="email"
+                                        onChange={(e) => {setEmail(e.target.value)}}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -79,6 +66,7 @@ export default function SignUp() {
                                         type="password"
                                         id="password"
                                         autoComplete="current-password"
+                                        onChange={(e) => {setPassword(e.target.value)}}
                                     />
                                 </Grid>
                             </Grid>

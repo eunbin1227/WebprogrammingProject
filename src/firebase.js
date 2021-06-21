@@ -1,5 +1,9 @@
-import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/analytics';
+import 'firebase/auth';
+
+const firebase = require('firebase');
+const firebaseui = require('firebaseui');
 
 const firebaseConfig = {
     apiKey: "AIzaSyAbjKRUxmvZKALw53A_g50YG4wwupfoxOs",
@@ -11,10 +15,20 @@ const firebaseConfig = {
     measurementId: "G-G4BEL22EEG"
 };
 
-// Initialize Firebase
+const firestore = firebase.firestore();
+const auth = firebase.auth();
+
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+ui.start('#firebaseui-auth-container', {
+    signInOptions: [
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    ],
+    // Other config options...
+});
+
 firebase.initializeApp(firebaseConfig);
 
-const firestore = firebase.firestore();
-
 // 필요한 곳에서 사용할 수 있도록 내보내기
-export { firestore };
+export { firestore, auth };
