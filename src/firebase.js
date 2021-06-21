@@ -1,10 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import 'firebase/analytics';
 import 'firebase/auth';
-//
-// const firebase = require('firebase');
-// const firebaseui = require('firebaseui');
 
 const firebaseConfig = {
     apiKey: "AIzaSyAbjKRUxmvZKALw53A_g50YG4wwupfoxOs",
@@ -16,11 +12,13 @@ const firebaseConfig = {
     measurementId: "G-G4BEL22EEG"
 };
 
-
 firebase.initializeApp(firebaseConfig);
-const firestore = firebase.firestore();
-const auth = firebase.auth();
 
+const firestore = firebase.firestore();
+
+const auth = firebase.auth();
+const user = firebase.auth().currentUser;
+const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 // 필요한 곳에서 사용할 수 있도록 내보내기
-export { firestore, auth };
+export { firestore, user, timestamp, auth};

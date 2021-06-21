@@ -17,11 +17,24 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
+import {writePost} from "./Api";
+import {useState} from 'react';
+import {firestore, timestamp, user} from "./firebase";
 
 
 export default function Write() {
     const classes = useStyles();
-
+    const userName = '익명'
+    if (user != null){
+        userName = user.displayName
+    }
+    const handleWrite = (e) => {
+        e.preventDefault();
+        writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
+        window.location.href ='/';
+    }
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
     }
@@ -53,12 +66,14 @@ export default function Write() {
                             id="title"
                             label="제목"
                             variant="outlined"
+                            onChange={e=>setTitle(e.target.value)}
                         />
                         <TextField
                             id="body"
                             label="내용"
                             size="large"
                             variant="outlined"
+                            onChange={e=>setBody(e.target.value)}
                             rows={23}
                             multiline
                         />
@@ -81,7 +96,7 @@ export default function Write() {
                         >
                             취소
                         </Button>
-                        <Button>
+                        <Button onClick={handleWrite}>
                             게시
                         </Button>
                     </div>
