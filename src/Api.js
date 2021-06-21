@@ -51,7 +51,6 @@ const pushLike = (docid, user) => {
             like: firestore.FieldValue.arrayRemove(user)
         })
     }
-
 }
 
 

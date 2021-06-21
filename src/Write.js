@@ -24,20 +24,36 @@ import {firestore, timestamp, user} from "./firebase";
 
 export default function Write() {
     const classes = useStyles();
-    const userName = '익명'
+    let userName = '익명'
+    const [data, setData] = useState(undefined);
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
+
     if (user != null){
-        userName = user.displayName
+        userName = user.displayName;
     }
+
     const handleWrite = (e) => {
         e.preventDefault();
         writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
         window.location.href ='/';
     }
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
     }
+
+    // const addFile = (e) => {
+    //     e.preventDefault();
+    //     const file = e.target.files[0];
+    //     const reader = new FileReader();
+    //
+    //     reader.onload = async (progressEvent) => {
+    //         const data = await progressEvent.target.result;
+    //         setData(data);
+    //     }
+    //     reader.readAsText(file);
+    // }
 
     return (
         <ThemeProvider theme={theme}>
@@ -61,7 +77,7 @@ export default function Write() {
                             </Button>
                         </Breadcrumbs>
                     </Grid>
-                    <Box /*border={2} borderColor="grey.500"*/ className={classes.box}>
+                    <Box className={classes.box}>
                         <TextField
                             id="title"
                             label="제목"
@@ -71,16 +87,19 @@ export default function Write() {
                         <TextField
                             id="body"
                             label="내용"
-                            size="large"
                             variant="outlined"
                             onChange={e=>setBody(e.target.value)}
-                            rows={23}
+                            rows={18}
                             multiline
                         />
                     </Box>
                     <div align='left' style={{width: '80%'}}>
                         <Button>
                             <CameraAltOutlined />
+                            {/*<input*/}
+                            {/*    type="file"*/}
+                            {/*    onChange={addFile}*/}
+                            {/*    hidden/>*/}
                         </Button>
                         <Button>
                             <VideoCallOutlined />
