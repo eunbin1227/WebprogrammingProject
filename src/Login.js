@@ -17,7 +17,6 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import {useState} from "react";
 import theme from './theme';
 import { auth } from './firebase';
-import { Redirect, Route } from "react-router";
 
 export default function Login() {
     const classes = useStyles();
@@ -35,7 +34,7 @@ export default function Login() {
             })
             .catch((error) => {
                 const errorCode = error.code;
-                const errorMessage = error.message;
+                //const errorMessage = error.message;
 
                 if(errorCode === 'auth/wrong-password') {
                     alert('비밀번호를 확인해주세요!');

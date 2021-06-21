@@ -24,6 +24,7 @@ export default function Main() {
     const classes = useStyles();
     const [login, setLogin] = useState(undefined);
     const [name, setName] = useState('');
+    const [signInTime, setSignInTime] = useState('');
 
     const rows = [
         { id: 1, col1: 'Test1', col2: '10', col3: '1', col4: '5', col5: '2021년 06월 21일' },
@@ -32,11 +33,11 @@ export default function Main() {
     ];
 
     const columns = [
-        { field: 'col1', headerName: ' ',  width: 500 },
-        { field: 'col2', headerName: ' ', renderHeader: () => (<ChatBubbleOutline />), width: 150 },
-        { field: 'col3', headerName: ' ', renderHeader: () => (<FavoriteBorder />), width: 150 },
-        { field: 'col4', headerName: ' ', renderHeader: () => (<Visibility />), width: 150 },
-        { field: 'col5', headerName: '최근 활동', width: 300 },
+        { field: 'col1', headerName: '제목',  width: 600 },
+        { field: 'col2', headerName: ' ', renderHeader: () => (<ChatBubbleOutline />), width: 100 },
+        { field: 'col3', headerName: ' ', renderHeader: () => (<FavoriteBorder />), width: 100 },
+        { field: 'col4', headerName: ' ', renderHeader: () => (<Visibility />), width: 100 },
+        { field: 'col5', headerName: '최근 활동', width: 200 },
     ];
 
     useEffect(() => {
@@ -45,12 +46,18 @@ export default function Main() {
                 // User is signed in.
                 setLogin(true);
                 setName(user.email.split('@')[0]);
+                setSignInTime(changeTime(user.metadata.lastSignInTime));
             } else {
                 // No user is signed in.
                 setLogin(false);
             }
         });
     })
+
+    const changeTime = (input) => {
+        const temp = input.split(' ');
+        return temp[3]+'년 '+(new Date(Date.parse(temp[2] + "1, 2021")).getMonth()+1)+'월 '+temp[1]+ '일';
+    }
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -76,10 +83,11 @@ export default function Main() {
                 <header className={classes.header}>
                     <div>Logo</div>
                     <Typography variant='h1'>Title</Typography>
-                    <div className="login-panel">
+                    <div className="login-panel" align='center'>
                         {login ?
                             <div>
                                 <Typography> Hello! {name} </Typography>
+                                <Typography> 최근 접속일: {signInTime} </Typography>
                                 <Button
                                     variant='contained'
                                     color='primary'
