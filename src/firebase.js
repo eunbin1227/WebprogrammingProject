@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAbjKRUxmvZKALw53A_g50YG4wwupfoxOs",
@@ -15,6 +16,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const firestore = firebase.firestore();
+const user = firebase.auth().currentUser;
+const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 // 필요한 곳에서 사용할 수 있도록 내보내기
-export { firestore };
+export { firestore, user, timestamp};

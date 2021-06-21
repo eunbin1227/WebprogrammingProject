@@ -16,16 +16,32 @@ import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
+import {useEffect, useState} from "react";
+import {getPost} from "./Api";
+import {firestore} from "./firebase";
 
 
 export default function Main() {
     const classes = useStyles();
+    const [data, setData] = useState([])
+    useEffect(()=>{
+        firestore.collection('post').get().then((querySnapshot) => {
+            setData(querySnapshot.docs.map((doc)=>
+                ({id: doc.id, detail: doc.data().contents})
+            ))
+        })
+        console.log(data)
+    },[])
 
     const rows = [
         { id: 1, col1: 'Test1', col2: '10', col3: '1', col4: '5', col5: '2021년 06월 21일' },
         { id: 2, col1: 'Test2', col2: '1', col3: '12', col4: '45', col5: '2021년 02월 21일' },
         { id: 3, col1: 'Test3', col2: '106', col3: '13', col4: '55', col5: '2021년 01월 21일' },
     ];
+    // 대충 이런 식으로 뿌려주면 될 것 같기도 합니다..
+    // const rows = data.map(d => {
+    //     return {id: d.id, col1: d.detail.title, col2: 0, col3: 0, col4: 0, col5: d.detail.createdAt}
+    // })
 
     const columns = [
         { field: 'col1', headerName: ' ',  width: 500 },
@@ -39,6 +55,7 @@ export default function Main() {
         e.preventDefault();
         console.log('You clicked a breadcrumb.');
     }
+
 
     return (
         <ThemeProvider theme={theme}>
