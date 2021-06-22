@@ -72,14 +72,14 @@ export default function Post() {
         await firestore.collection('post').doc(id).get().then((doc) => {
             setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: Object.values(doc.data().comment), like: doc.data().like})
         })
-    },[])
+    },[flag])
 
     useEffect(()=> {
         setTimeout(()=>{
             console.log(data)
             {data && data.like.includes(name) ? setFlag(true) : setFlag(false)}
-        }, 1000)
-    })
+        }, 100)
+    },[])
 
 
     const handleLogout = (e) => {
@@ -152,10 +152,10 @@ export default function Post() {
                         <Button
                             style={{maxWidth: '5px', marginBottom: '20px'}}
                             onClick={handleHeart}
-                            color={flag ? 'secondary' : 'default'}
-                        ><FavoriteBorder align='left'/></Button>
+                            color={flag ? 'default' : 'default'}
+                        ><FavoriteBorder align='left'/>{data && data.like.length}</Button>
                         <Grid container className={classes.commentList} align='left'>
-                            <Typography></Typography>
+                            <Typography>댓글</Typography>
                             {
                                 data ? data.comment.map((d) => <Typography key={d.user + d.comment}>{`${d.user} : ${d.comment}`}</Typography>) : console.log('s')
                             }
@@ -168,7 +168,7 @@ export default function Post() {
                             onChange={(e) => setComment(e.target.value)}
                             multiline
                         />
-                        <Button className={classes.btn} onClick={handleWrite} style = {{color:'white'}} >
+                        <Button onClick={handleWrite}>
                             게시
                         </Button>
                     </Box>
@@ -215,9 +215,6 @@ const useStyles = makeStyles(() => ({
     commentList: {
         display: 'flex',
         flexDirection: 'column',
-    },
-    btn: {
-        backgroundColor:'#2B60DE',
     }
 }));
 
