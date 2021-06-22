@@ -11,6 +11,7 @@ import {
 import {
     AccountCircle,
     NavigateNext,
+    FavoriteBorder,
 } from '@material-ui/icons';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -30,6 +31,7 @@ export default function Post() {
     const [login, setLogin] = useState(undefined);
     const [name, setName] = useState('');
     const [docid, setDocid] = useState('');
+    const [flag, setFlag] = useState(false);
 
 
     useEffect(() => {
@@ -76,6 +78,10 @@ export default function Post() {
             // An error happened.
             alert(error.code);
         });
+    }
+
+    const handleHeart = () => {
+        setFlag(!flag);
     }
 
 
@@ -129,6 +135,11 @@ export default function Post() {
                         <Typography variant ='h4' className={classes.title}>{data ? data.title: console.log('ㅜㅜ')}</Typography>
                         <Typography align="right" className={classes.title}>작성자: {data ? data.author: console.log('dd')}</Typography>
                         <Typography className={classes.body}>{data ? data.body: console.log('ㅜㅜ')}</Typography>
+                        <Button
+                            style={{maxWidth: '5px', marginBottom: '20px'}}
+                            onClick={handleHeart}
+                            color={flag ? 'secondary' : 'default'}
+                        ><FavoriteBorder align='left'/></Button>
                         <Grid container>
                             <Typography>댓글</Typography>
                         </Grid>

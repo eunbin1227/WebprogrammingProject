@@ -18,24 +18,34 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
 import {writePost, uploadImage} from "./Api";
-import {useState} from 'react';
-import {firestore, timestamp, user} from "./firebase";
+import {useEffect, useState} from 'react';
+import {auth, firestore, timestamp, user} from "./firebase";
 
 
 export default function Write() {
     const classes = useStyles();
-    let userName = '익명'
+
     const [data, setData] = useState(undefined);
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 
-    if (user != null){
-        userName = user.displayName;
-    }
+
+    useEffect(() => {
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                setLogin(true);
+                setName(user.email.split('@')[0]);
+            } else {
+                // No user is signed in.
+                setLogin(false);
+                setName('익명');
+            }
+        });
+    })
 
     const handleWrite = (e) => {
         e.preventDefault();
-
         writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
         window.location.href ='/';
     }
