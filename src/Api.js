@@ -34,9 +34,10 @@ const deletePost = (docid) => {
     })
 }
 
-const writeComments = (docid, user, comment) => {
+
+const writeComments = (docid, comment) => {
     db.collection('post').doc(docid).update({
-        comment: ffieldvalue.arrayUnion({user: user, comment: comment})
+    comment : ffieldvalue.arrayUnion(comment)
     });
 }
 
