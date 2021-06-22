@@ -37,7 +37,9 @@ export default function Write() {
         e.preventDefault();
 
         writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
-        window.location.href ='/';
+        setTimeout(()=>{
+            window.location.href ='/';
+        }, 1000)
     }
 
     const handleClick = () => {
