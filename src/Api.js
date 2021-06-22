@@ -1,4 +1,6 @@
-import {firestore} from './firebase'
+import {firestore, fstorage} from './firebase'
+import firebase from 'firebase/app';
+
 
 const db = firestore
 
@@ -42,15 +44,46 @@ const writeComments = (docid, user, comment) => {
 
 const pushLike = (docid, user) => {
     const docRef = db.collection('post').doc(docid)
-    if (user in docRef.get().data().like){
+    if (user in docRef.get().data().like) {
         docRef.update({
             like: firestore.FieldValue.arrayUnion(user)
-        })}
-    else{
+        })
+    } else {
         docRef.update({
             like: firestore.FieldValue.arrayRemove(user)
         })
     }
+}
+const uploadImage = (file) => {
+    const storageRef = fstorage.ref()
+    const metadata = {
+        contentType: 'image/jpeg'
+    };
+    const uploadTask = storageRef.child('image/'+file).put(file, metadata);
+    uploadTask.on(firebase.storage.TaskEvent.state_changed,
+        function(snapshot){
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100 ;
+        console.log('Upload is '+ progress + '% done');
+        switch (snapshot.state) {
+            case firebase.storage.TaskState.paused:
+                console.log('Upload is paused');
+                break;
+            case firebase.storage.TaskState.running:
+                console.log('Upload is running');
+                break;
+        }
+        }, function(error) {
+        switch (error.code) {
+            case 'storage/unauthorized':
+                break
+            case 'storage/canceled':
+                break
+        }
+        }, function (){
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
+            console.log('File available at', downloadURL)
+        })
+        })
 }
 
 
@@ -59,5 +92,6 @@ export {
     getPost,
     deletePost,
     writeComments,
-    pushLike
+    pushLike,
+    uploadImage,
 }

@@ -18,6 +18,7 @@ import {useEffect, useState} from 'react';
 import {auth, firestore, timestamp, user} from "./firebase";
 
 
+
 export default function Post() {
     const classes = useStyles();
 
@@ -53,6 +54,16 @@ export default function Post() {
         console.log('You clicked a breadcrumb.');
     }
 
+
+    useEffect(async ()=>{
+        const docid = window.location.search.split('?')[1]
+        await firestore.collection('post').doc(docid).get().then((doc) => {
+            console.log(doc.data())
+            setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: doc.data().comment, like: doc.data().like})
+        })
+        console.log(data)
+    },[])
+  
     const handleLogout = (e) => {
         e.preventDefault();
         auth.signOut().then(() => {
@@ -111,6 +122,7 @@ export default function Post() {
                     </Grid>
                     <Box className={classes.box} >
                         <Typography>제목</Typography>
+                        <Typography>{data.title}</Typography>
                         <Typography>내용</Typography>
                         <TextField
                             id="comment"
@@ -120,6 +132,7 @@ export default function Post() {
                             onChange={(e) => setComment(e.target.value)}
                             multiline
                         />
+                              
                         <Button onClick={handleWrite}>
                             게시
                         </Button>
