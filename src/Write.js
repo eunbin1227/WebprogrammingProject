@@ -20,7 +20,10 @@ import theme from './theme';
 import {writePost, uploadImage} from "./Api";
 import {useState} from 'react';
 import {firestore, timestamp, user} from "./firebase";
-
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 export default function Write() {
     const classes = useStyles();
@@ -28,6 +31,7 @@ export default function Write() {
     const [data, setData] = useState(undefined);
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [location, setLocation] = useState ('')
 
     if (user != null){
         userName = user.displayName;
@@ -43,6 +47,10 @@ export default function Write() {
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
     }
+
+    const handleChange = (event) => {
+        setLocation(event.target.value);
+    };
 
     // const addFile = (e) => {
     //     e.preventDefault();
@@ -69,7 +77,8 @@ export default function Write() {
                         <AccountCircle />
                     </div>
                 </header>
-                <div align='center' >
+
+                <div align='center'>
                     <Grid className={classes.bread}>
                         <Breadcrumbs separator={<NavigateNext fontSize="small" />} aria-label="breadcrumb" className={classes.breadItem}>
                             <Button component={Link} to="/" onClick={handleClick}>
@@ -92,10 +101,31 @@ export default function Write() {
                             label="내용"
                             variant="outlined"
                             onChange={e=>setBody(e.target.value)}
-                            rows={21}
+                            rows={25}
                             multiline
                         />
                     </Box>
+
+                    <div>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="demo-simple-select-label">Location</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={location}
+                                onChange={handleChange}
+                            >
+                                <MenuItem>인문대 1동</MenuItem>
+                                <MenuItem>사회과학대학 16동</MenuItem>
+                                <MenuItem>글로벌 공학 교육 센터 38동</MenuItem>
+                                <MenuItem>경영대학 58동 </MenuItem>
+                                <MenuItem>농업생명과학대학 200동 </MenuItem>
+                                <MenuItem>생활과학대학 220동</MenuItem>
+                                <MenuItem>기숙사 919동</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
                     <div align='left' style={{width: '80%'}}>
                         <Button>
                             <CameraAltOutlined />
@@ -156,7 +186,17 @@ const useStyles = makeStyles(() => ({
         width: '80%',
         height: '80%',
         flexDirection: 'column',
-    }
+    },
+    formControl: {
+        display: 'flex',
+        width: '80%',
+        height: '80%',
+        minWidth: 150,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+
 }));
 
 
