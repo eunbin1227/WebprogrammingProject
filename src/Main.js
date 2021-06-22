@@ -58,7 +58,12 @@ export default function Main() {
     })
 
     const columns = [
-        { field: 'col1', headerName: '제목',  width: 600 },
+        {
+            field: 'col1',
+            headerName: '제목',
+            width: 600,
+            renderCell: (params) => {return (<Button component={Link} to={'/Main/Post/'+params.id}>{params.value}</Button>)}
+        },
         { field: 'col2', headerName: ' ', renderHeader: () => (<ChatBubbleOutline />), width: 100 },
         { field: 'col3', headerName: ' ', renderHeader: () => (<FavoriteBorder />), width: 100 },
         { field: 'col4', headerName: ' ', renderHeader: () => (<Visibility />), width: 100 },
