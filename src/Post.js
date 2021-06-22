@@ -4,7 +4,9 @@ import {
     Typography,
     Grid,
     Breadcrumbs,
-    Box, TextField,
+    Box,
+    TextField,
+    Paper
 } from '@material-ui/core';
 import {
     AccountCircle,
@@ -61,10 +63,8 @@ export default function Post() {
         const id = window.location.search.split('?')[1];
         setDocid(window.location.search.split('?')[1]);
         await firestore.collection('post').doc(id).get().then((doc) => {
-            console.log(doc.data())
             setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: doc.data().comment, like: doc.data().like})
         })
-        console.log(data)
     },[])
 
     const handleLogout = (e) => {
@@ -126,22 +126,24 @@ export default function Post() {
                         </Breadcrumbs>
                     </Grid>
                     <Box className={classes.box} >
-                        <Typography>제목</Typography>
-                        <Typography>내용</Typography>
+                        <Typography variant ='h4' className={classes.title}>{data ? data.title: console.log('ㅜㅜ')}</Typography>
+                        <Typography align="right" className={classes.title}>작성자: {data ? data.author: console.log('dd')}</Typography>
+                        <Typography className={classes.body}>{data ? data.body: console.log('ㅜㅜ')}</Typography>
+                        <Grid container>
+                            <Typography>댓글</Typography>
+                        </Grid>
                         <TextField
                             id="comment"
                             label="댓글"
                             variant="outlined"
-                            rows={10}
+                            rows={5}
                             onChange={(e) => setComment(e.target.value)}
                             multiline
                         />
-                              
                         <Button onClick={handleWrite}>
                             게시
                         </Button>
                     </Box>
-
                 </div>
             </div>
         </ThemeProvider>
@@ -175,6 +177,12 @@ const useStyles = makeStyles(() => ({
         width: '80%',
         height: '80%',
         flexDirection: 'column',
+    },
+    title: {
+        marginBottom: theme.spacing(5),
+    },
+    body: {
+        marginBottom: theme.spacing(10),
     }
 }));
 
