@@ -60,5 +60,5 @@ export {
     getPost,
     deletePost,
     writeComments,
-    pushLike
+    pushLike,
 }
