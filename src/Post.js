@@ -16,7 +16,7 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import {writeComments, writePost} from "./Api";
+import {pushLike, writeComments, writePost} from "./Api";
 import {useEffect, useState} from 'react';
 import {auth, firestore, timestamp, user} from "./firebase";
 
@@ -70,10 +70,13 @@ export default function Post() {
         const id = window.location.search.split('?')[1];
         setDocid(window.location.search.split('?')[1]);
         await firestore.collection('post').doc(id).get().then((doc) => {
-
             setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: Object.values(doc.data().comment), like: doc.data().like})
         })
     },[])
+
+    setTimeout(()=>{
+        {data && data.like.includes(name) ? setFlag(true) : setFlag(false)}
+    }, 100)
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -87,7 +90,8 @@ export default function Post() {
     }
 
     const handleHeart = () => {
-        setFlag(!flag);
+        setFlag(!flag)
+        pushLike(docid, name)
     }
 
 
