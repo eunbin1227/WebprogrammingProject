@@ -40,6 +40,7 @@ export default function Write() {
     const handleWrite = (e) => {
         e.preventDefault();
 
+        console.log(title,body,userName,timestamp);
         writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
         window.location.href ='/';
     }
@@ -191,7 +192,6 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         width: '80%',
         height: '80%',
-        minWidth: 150,
     },
     selectEmpty: {
         marginTop: theme.spacing(2),
