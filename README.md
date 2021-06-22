@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# 서울대학교 물품공유 커뮤니티 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 4조 강은빈 김언정 최연주 류영지
 
-## Available Scripts
+###### giturl : https://github.com/eunbin1227/WebprogrammingProject.git
+###### 실행가능한 url : 
 
-In the project directory, you can run:
+------------------------------
 
-### `yarn start`
+### 기능 명세
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+* 로그인/로그아웃이 가능하다.
+    - 유저가 로그인했을 시, 최근 활동 내역을 확인할 수 있다.
+* 새 게시글 작성이 가능하다.
+    - 게시물에는 제목 및 내용을 작성할 수 있다.
+    - 게시글 업로드 시 본인 지역을 선택할 수 있다.
+    - 게시글 내 이미지 파일을 첨부할 수 있다.
+* 게시글마다 댓글을 작성할 수 있다.
+* 게시글에 '좋아요'를 남길 수 있다.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+------------------------------
+### 개요
+- 내부 라우팅은 /main, /login, /signup, /write, /post로 구성 (React-Router-Dom 사)
+- 세부 기능은 하단에 각각 설명
 
-### `yarn test`
+------------------------------
+### 세부 기능
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+/main
+- 로그인 여부와 최근 접속일 확인 가능
+- 게시글 목록 확인 가능
+- 게시글 목록에서 제목, 댓글 수, 좋아요 수, 장소, 작성 시 확인 가능
+- 제목 선택 시 해당 게시물 페이지로 이동
+- '게시글 작성' 선택 시 새 게시글 작성 페동이지로 이동
 
-### `yarn build`
+/login
+- 회원가입한 email과 password로 로그인 가능
+- 로그아웃 가능
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+/signup
+- email과 password로 회원가입 가능
+- '계정이 이미 있으신가요?' 선택 시 로그인 창으로 이동
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+/write
+- 제목 및 내용 입력 가능
+- 이미지 여러 장 선택 및 업로드 가능
+- 이미지 업로드 전 미리보기 제공
+- 장소 선택 가능
+  - 인문대 1동, 사회과학대학 16동, 글로벌 공학 교육 센터 38동, 경영대학 58동, 농업생명과학대학 200동, 생활과학대학 220동, 기숙사 919동 중 선택
+  
+/post
+- 타 유저의 게시글 제목 및 내용 확인 가능
+- 댓글 게시 가능
+- 좋아요 가능
+- 좌측 상단 '메인' 선택 시 메인 창으로 이동
