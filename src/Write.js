@@ -6,30 +6,33 @@ import {
     Breadcrumbs,
     TextField,
     Box,
+    IconButton,
+    Checkbox,
 } from '@material-ui/core';
 import {
     AccountCircle,
     NavigateNext,
     CameraAltOutlined,
-    VideoCallOutlined,
-    AttachFileOutlined,
+    CloudUpload,
+    Delete,
 } from '@material-ui/icons';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
 import { writePost } from "./Api";
 import {useEffect, useState} from 'react';
-import {auth, timestamp} from "./firebase";
-
+import {auth, timestamp, fstorage, firebaseConfig, firebaseApp} from "./firebase";
+import ReactFirebaseImageUploader from "react-firebase-image-upload-control";
 
 export default function Write() {
     const classes = useStyles();
 
-    const [data, setData] = useState(undefined);
+    const [url, setURL] = useState("");
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [name, setName] = useState('');
     const [login, setLogin] = useState(undefined);
+    const [file, setFile] = useState(null);
 
 
     useEffect(() => {
@@ -54,7 +57,6 @@ export default function Write() {
 
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
-        console.log(name);
     }
 
     const handleLogout = (e) => {
@@ -68,17 +70,16 @@ export default function Write() {
         });
     }
 
-    // const addFile = (e) => {
-    //     e.preventDefault();
-    //     const file = e.target.files[0];
-    //     const reader = new FileReader();
-    //
-    //     reader.onload = async (progressEvent) => {
-    //         const data = await progressEvent.target.result;
-    //         setData(data);
-    //     }
-    //     // reader.readAsText(file);
-    // }
+
+
+    const addFile = () => {
+
+    }
+
+    const handleUpload = () => {
+
+    }
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -142,21 +143,27 @@ export default function Write() {
                             multiline
                         />
                     </Box>
-                    <div align='left' style={{width: '80%'}}>
-                        <Button>
-                            <CameraAltOutlined />
-                            <input
-                                // type="file"
-                                // onChange={addFile}
-                                hidden
-                                />
-                        </Button>
-                        <Button>
-                            <VideoCallOutlined />
-                        </Button>
-                        <Button>
-                            <AttachFileOutlined />
-                        </Button>
+
+                    <div style={{ width: "80%" }}>
+                        <ReactFirebaseImageUploader
+                            firebaseApp={firebaseApp}
+                            storageFolder="rfiu-test"
+                            checkboxControl={Checkbox}
+                            buttonControl={Button}
+                            uploadButtonIcon={CloudUpload}
+                            removeButtonIcon={Delete}
+                            options={{
+                                styles: {
+                                    imgPreview: { maxWidth: "50px" },
+                                    imgPreviewLabel: { fontSize: "12px" },
+                                    progressControlWrapper: { height: "40px", width: "40px" }
+                                }
+                            }}
+                            uploadCompleteCallback={statusObj => {
+                                console.log("uploadCompleteCallback triggered, and we're done!, statusObj", statusObj);
+                            }}
+                            multiple
+                        />
                     </div>
                     <div align='right' style={{width: '80%'}}>
                         <Button
@@ -202,6 +209,12 @@ const useStyles = makeStyles(() => ({
         width: '80%',
         height: '80%',
         flexDirection: 'column',
+    },
+    input: {
+
+    },
+    button: {
+
     }
 }));
 
