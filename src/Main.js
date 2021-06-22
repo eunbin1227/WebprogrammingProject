@@ -49,7 +49,8 @@ export default function Main() {
     }
 
 
-    const rows = data? data.map(d => {
+
+    const rows = data ? data.map(d => {
         return {
             id: d.id,
             col1: d.detail.title,
