@@ -57,25 +57,26 @@ export default function Post() {
         obj['comment'] = comment;
         const newComment = obj;
         writeComments(docid, newComment);
+        setTimeout(() => {window.location.reload()}, 1000);
     }
 
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
+        console.log(data);
     }
 
 
-    useEffect(async ()=>{
+    useEffect(async()=>{
         const id = window.location.search.split('?')[1];
         setDocid(window.location.search.split('?')[1]);
         await firestore.collection('post').doc(id).get().then((doc) => {
-            setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: doc.data().comment, like: doc.data().like})
+            setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: Object.values(doc.data().comment), like: doc.data().like})
         })
-        setTimeout(()=>{
-            console.log(data)
-            {data.like.includes(name) ? setFlag(true) : setFlag(false)}
-        }, 1000)
     },[])
 
+    setTimeout(()=>{
+        {data && data.like.includes(name) ? setFlag(true) : setFlag(false)}
+    }, 100)
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -149,8 +150,11 @@ export default function Post() {
                             onClick={handleHeart}
                             color={flag ? 'secondary' : 'default'}
                         ><FavoriteBorder align='left'/></Button>
-                        <Grid container>
+                        <Grid container className={classes.commentList} align='left'>
                             <Typography>댓글</Typography>
+                            {
+                                data ? data.comment.map((d) => <Typography key={d.user + d.comment}>{`${d.user} : ${d.comment}`}</Typography>) : console.log('s')
+                            }
                         </Grid>
                         <TextField
                             id="comment"
@@ -203,6 +207,10 @@ const useStyles = makeStyles(() => ({
     },
     body: {
         marginBottom: theme.spacing(10),
+    },
+    commentList: {
+        display: 'flex',
+        flexDirection: 'column',
     }
 }));
 
