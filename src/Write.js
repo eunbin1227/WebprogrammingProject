@@ -86,7 +86,9 @@ export default function Write() {
 
     }
 
-
+    const handleChange = (event) => {
+        setLocation(event.target.value);
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -152,7 +154,25 @@ export default function Write() {
                             multiline
                         />
                     </Box>
-
+                    <div>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="demo-simple-select-label">Location</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={location}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value="인문대 1동">인문대 1동</MenuItem>
+                                <MenuItem value="사회과학대학 16동">사회과학대학 16동</MenuItem>
+                                <MenuItem value="글로벌 공학 교육 센터 38동">글로벌 공학 교육 센터 38동</MenuItem>
+                                <MenuItem value="경영대학 58동">경영대학 58동 </MenuItem>
+                                <MenuItem value="농업생명과학대학 200동">농업생명과학대학 200동 </MenuItem>
+                                <MenuItem value="생활과학대학 220동">생활과학대학 220동</MenuItem>
+                                <MenuItem value="기숙사 919동">기숙사 919동</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
                     <div style={{ width: "80%" }}>
                         <ReactFirebaseImageUploader
                             firebaseApp={firebaseApp}
@@ -173,42 +193,8 @@ export default function Write() {
                             }}
                             multiple
                         />
-                    <div>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel id="demo-simple-select-label">Location</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={location}
-                                onChange={handleChange}
-                            >
-                                <MenuItem value="인문대 1동">인문대 1동</MenuItem>
-                                <MenuItem value="사회과학대학 16동">사회과학대학 16동</MenuItem>
-                                <MenuItem value="글로벌 공학 교육 센터 38동">글로벌 공학 교육 센터 38동</MenuItem>
-                                <MenuItem value="경영대학 58동">경영대학 58동 </MenuItem>
-                                <MenuItem value="농업생명과학대학 200동">농업생명과학대학 200동 </MenuItem>
-                                <MenuItem value="생활과학대학 220동">생활과학대학 220동</MenuItem>
-                                <MenuItem value="기숙사 919동">기숙사 919동</MenuItem>
-                            </Select>
-                        </FormControl>
                     </div>
 
-//                     <div align='left' style={{width: '80%'}}>
-//                         <Button>
-//                             <CameraAltOutlined />
-//                             <input
-//                                 // type="file"
-//                                 // onChange={addFile}
-//                                 hidden
-//                                 />
-//                         </Button>
-//                         <Button>
-//                             <VideoCallOutlined />
-//                         </Button>
-//                         <Button>
-//                             <AttachFileOutlined />
-//                         </Button>
-                    </div>
                     <div align='right' style={{width: '80%'}}>
                         <Button
                             component={Link}
