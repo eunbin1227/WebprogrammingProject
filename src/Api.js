@@ -1,4 +1,4 @@
-import {firestore, fstorage} from './firebase'
+import {firestore, fstorage, ffieldvalue} from './firebase'
 import firebase from 'firebase/app';
 
 
@@ -36,24 +36,26 @@ const deletePost = (docid) => {
     })
 }
 
+
 const writeComments = (docid, user, comment) => {
     db.collection('post').doc(docid).update({
-        comment: firestore.FieldValue.arrayUnion({user: comment})
+        comment: ffieldvalue.arrayUnion({user: user, comment: comment})
     });
 }
 
 const pushLike = (docid, user) => {
     const docRef = db.collection('post').doc(docid)
-    if (user in docRef.get().data().like) {
+    if (user in docRef.get().data().like){
         docRef.update({
-            like: firestore.FieldValue.arrayUnion(user)
-        })
-    } else {
+            like: ffieldvalue.arrayUnion(user)
+        })}
+    else{
         docRef.update({
-            like: firestore.FieldValue.arrayRemove(user)
+            like: ffieldvalue.arrayRemove(user)
         })
     }
 }
+
 const uploadImage = (file) => {
     const storageRef = fstorage.ref()
     const metadata = {

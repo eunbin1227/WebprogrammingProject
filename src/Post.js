@@ -27,6 +27,7 @@ export default function Post() {
     const [comment, setComment] = useState('');
     const [login, setLogin] = useState(undefined);
     const [name, setName] = useState('');
+    const [docid, setDocid] = useState('');
 
 
     useEffect(() => {
@@ -46,7 +47,8 @@ export default function Post() {
 
     const handleWrite = (e) => {
         e.preventDefault();
-        writeComments('post', {docid: '' , user: {name}, comment: {comment}});
+        console.log(docid, name, comment);
+        writeComments(docid, name, comment);
         window.location.href ='/';
     }
 
@@ -56,14 +58,15 @@ export default function Post() {
 
 
     useEffect(async ()=>{
-        const docid = window.location.search.split('?')[1]
-        await firestore.collection('post').doc(docid).get().then((doc) => {
+        const id = window.location.search.split('?')[1];
+        setDocid(window.location.search.split('?')[1]);
+        await firestore.collection('post').doc(id).get().then((doc) => {
             console.log(doc.data())
             setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: doc.data().comment, like: doc.data().like})
         })
         console.log(data)
     },[])
-  
+
     const handleLogout = (e) => {
         e.preventDefault();
         auth.signOut().then(() => {
@@ -122,7 +125,6 @@ export default function Post() {
                     </Grid>
                     <Box className={classes.box} >
                         <Typography>제목</Typography>
-                        <Typography>{data.title}</Typography>
                         <Typography>내용</Typography>
                         <TextField
                             id="comment"
