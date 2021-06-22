@@ -155,7 +155,6 @@ export default function Post() {
                             color={flag ? 'default' : 'default'}
                         ><FavoriteBorder align='left'/>{data && data.like.length}</Button>
                         <Grid container className={classes.commentList} align='left'>
-                            <Typography>댓글</Typography>
                             {
                                 data ? data.comment.map((d) => <Typography key={d.user + d.comment}>{`${d.user} : ${d.comment}`}</Typography>) : console.log('s')
                             }

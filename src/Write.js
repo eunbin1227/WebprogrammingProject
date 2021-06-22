@@ -6,6 +6,8 @@ import {
     Breadcrumbs,
     TextField,
     Box,
+    IconButton,
+    Checkbox,
     FormControl,
     InputLabel,
     Select,
@@ -15,24 +17,27 @@ import {
     AccountCircle,
     NavigateNext,
     CameraAltOutlined,
-    VideoCallOutlined,
-    AttachFileOutlined,
+    CloudUpload,
+    Delete,
 } from '@material-ui/icons';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
 import { writePost } from "./Api";
 import {useEffect, useState} from 'react';
-import {auth, timestamp} from "./firebase";
+import {auth, timestamp, fstorage, firebaseConfig, firebaseApp} from "./firebase";
+import ReactFirebaseImageUploader from "react-firebase-image-upload-control";
+
 
 export default function Write() {
     const classes = useStyles();
 
-    const [data, setData] = useState(undefined);
+    const [url, setURL] = useState("");
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [name, setName] = useState('');
     const [login, setLogin] = useState(undefined);
+    const [file, setFile] = useState(null);
     const [location, setLocation] = useState('');
 
 
@@ -59,7 +64,6 @@ export default function Write() {
 
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
-        console.log(name);
     }
 
     const handleLogout = (e) => {
@@ -73,21 +77,16 @@ export default function Write() {
         });
     }
 
-    const handleChange = (event) => {
-        setLocation(event.target.value);
-    };
 
-    // const addFile = (e) => {
-    //     e.preventDefault();
-    //     const file = e.target.files[0];
-    //     const reader = new FileReader();
-    //
-    //     reader.onload = async (progressEvent) => {
-    //         const data = await progressEvent.target.result;
-    //         setData(data);
-    //     }
-    //     // reader.readAsText(file);
-    // }
+    const addFile = () => {
+
+    }
+
+    const handleUpload = () => {
+
+    }
+
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -154,6 +153,26 @@ export default function Write() {
                         />
                     </Box>
 
+                    <div style={{ width: "80%" }}>
+                        <ReactFirebaseImageUploader
+                            firebaseApp={firebaseApp}
+                            storageFolder="rfiu-test"
+                            checkboxControl={Checkbox}
+                            buttonControl={Button}
+                            uploadButtonIcon={CloudUpload}
+                            removeButtonIcon={Delete}
+                            options={{
+                                styles: {
+                                    imgPreview: { maxWidth: "50px" },
+                                    imgPreviewLabel: { fontSize: "12px" },
+                                    progressControlWrapper: { height: "40px", width: "40px" }
+                                }
+                            }}
+                            uploadCompleteCallback={statusObj => {
+                                console.log("uploadCompleteCallback triggered, and we're done!, statusObj", statusObj);
+                            }}
+                            multiple
+                        />
                     <div>
                         <FormControl className={classes.formControl}>
                             <InputLabel id="demo-simple-select-label">Location</InputLabel>
@@ -174,21 +193,21 @@ export default function Write() {
                         </FormControl>
                     </div>
 
-                    <div align='left' style={{width: '80%'}}>
-                        <Button>
-                            <CameraAltOutlined />
-                            <input
-                                // type="file"
-                                // onChange={addFile}
-                                hidden
-                                />
-                        </Button>
-                        <Button>
-                            <VideoCallOutlined />
-                        </Button>
-                        <Button>
-                            <AttachFileOutlined />
-                        </Button>
+//                     <div align='left' style={{width: '80%'}}>
+//                         <Button>
+//                             <CameraAltOutlined />
+//                             <input
+//                                 // type="file"
+//                                 // onChange={addFile}
+//                                 hidden
+//                                 />
+//                         </Button>
+//                         <Button>
+//                             <VideoCallOutlined />
+//                         </Button>
+//                         <Button>
+//                             <AttachFileOutlined />
+//                         </Button>
                     </div>
                     <div align='right' style={{width: '80%'}}>
                         <Button
@@ -235,6 +254,13 @@ const useStyles = makeStyles(() => ({
         height: '80%',
         flexDirection: 'column',
     },
+    input: {
+
+    },
+    button: {
+
+    },
+
     formControl: {
         display: 'flex',
         width: '80%',
