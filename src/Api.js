@@ -1,7 +1,5 @@
 import {firestore, fstorage, ffieldvalue} from './firebase'
 import firebase from 'firebase/app';
-
-
 const db = firestore
 
 const writePost = (collection, contents) =>{
@@ -37,9 +35,9 @@ const deletePost = (docid) => {
 }
 
 
-const writeComments = (docid, comment) => {
-    return db.collection('post').doc(docid).update({
-        'comment': comment
+const writeComments = (docid, user, comment) => {
+    db.collection('post').doc(docid).update({
+        comment: ffieldvalue.arrayUnion({user: user, comment: comment})
     });
 }
 

@@ -9,7 +9,6 @@ import {
     AccountCircle,
     ChatBubbleOutline,
     FavoriteBorder,
-    Visibility,
     NavigateNext,
 } from '@material-ui/icons';
 import { DataGrid } from '@material-ui/data-grid';
@@ -20,7 +19,6 @@ import {useEffect, useState} from "react";
 import { getPost } from "./Api";
 import { firestore } from "./firebase";
 import { auth } from './firebase';
-
 
 
 export default function Main() {
@@ -39,14 +37,17 @@ export default function Main() {
         console.log(data)
     },[])
 
+
     const changeTime = (input) => {
         const temp = input.split(' ');
         return temp[3]+'년 '+(new Date(Date.parse(temp[2] + "1, 2021")).getMonth()+1)+'월 '+temp[1]+ '일';
     }
 
+
     const changeSecond = (input) => {
-        return new Date(input * 1000).toISOString().substr(11, 8)
+        return new Date(input * 1000).toISOString().substr(11, 8) + " GMT"
     }
+
 
     const rows = data.map(d => {
         return {
@@ -65,9 +66,9 @@ export default function Main() {
             width: 600,
             renderCell: (params) => {return (<Button component={Link} to={'/Main/Post?'+params.id}>{params.value}</Button>)}
         },
-        { field: 'col2', headerName: ' ', renderHeader: () => (<ChatBubbleOutline />), width: 100 },
-        { field: 'col3', headerName: ' ', renderHeader: () => (<FavoriteBorder />), width: 100 },
-        { field: 'col4', headerName: ' ', renderHeader: () => (<Visibility />), width: 100 },
+        { field: 'col2', headerName: ' ', renderHeader: () => (<ChatBubbleOutline />), width: 80 },
+        { field: 'col3', headerName: ' ', renderHeader: () => (<FavoriteBorder />), width: 80 },
+        { field: 'col4', headerName: '장소', width: 140 },
         { field: 'col5', headerName: '작성 시간', width: 200 },
     ];
 
@@ -84,7 +85,6 @@ export default function Main() {
             }
         });
     })
-
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -108,7 +108,9 @@ export default function Main() {
             <div className={classes.root}>
                 <CssBaseline />
                 <header className={classes.header}>
-                    <div><img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img></div>
+                    <div><a href="/main">
+                        <img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img>
+                    </a></div>
                     <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
                     <div className="login-panel" align='center'>
                         {login ?
