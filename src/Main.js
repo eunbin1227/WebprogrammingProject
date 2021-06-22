@@ -17,13 +17,18 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
 import {useEffect, useState} from "react";
-import {getPost} from "./Api";
+import { getPost } from "./Api";
 import {firestore} from "./firebase";
+import { auth } from './firebase';
 
 
 export default function Main() {
     const classes = useStyles();
     const [data, setData] = useState([])
+    const [login, setLogin] = useState(undefined);
+    const [name, setName] = useState('');
+    const [signInTime, setSignInTime] = useState('');
+
     useEffect(()=>{
         firestore.collection('post').get().then((querySnapshot) => {
             setData(querySnapshot.docs.map((doc)=>
@@ -33,27 +38,68 @@ export default function Main() {
         console.log(data)
     },[])
 
-    // const rows = [
-    //     { id: 1, col1: 'Test1', col2: '10', col3: '1', col4: '5', col5: '2021년 06월 21일' },
-    //     { id: 2, col1: 'Test2', col2: '1', col3: '12', col4: '45', col5: '2021년 02월 21일' },
-    //     { id: 3, col1: 'Test3', col2: '106', col3: '13', col4: '55', col5: '2021년 01월 21일' },
-    // ];
-    // 대충 이런 식으로 뿌려주면 될 것 같기도 합니다..
+    const changeTime = (input) => {
+        const temp = input.split(' ');
+        return temp[3]+'년 '+(new Date(Date.parse(temp[2] + "1, 2021")).getMonth()+1)+'월 '+temp[1]+ '일';
+    }
+
+    const changeSecond = (input) => {
+        return new Date(input * 1000).toISOString().substr(11, 8)
+    }
+
     const rows = data.map(d => {
-        return {id: d.id, col1: d.detail.title, col2: d.comment.length, col3: d.like.length, col4: 0, col5: d.detail.createdAt}
+        return {
+            id: d.id,
+            col1: d.detail.title,
+            col2: d.comment.length,
+            col3: d.like.length,
+            col4: 0,
+            col5: changeSecond(d.detail.createdAt.seconds)}
     })
 
     const columns = [
-        { field: 'col1', headerName: ' ',  width: 500 },
-        { field: 'col2', headerName: ' ', renderHeader: () => (<ChatBubbleOutline />), width: 150 },
-        { field: 'col3', headerName: ' ', renderHeader: () => (<FavoriteBorder />), width: 150 },
-        { field: 'col4', headerName: ' ', renderHeader: () => (<Visibility />), width: 150 },
-        { field: 'col5', headerName: '최근 활동', width: 300 },
+        {
+            field: 'col1',
+            headerName: '제목',
+            width: 600,
+            renderCell: (params) => {return (<Button component={Link} to={'/Main/Post/'+params.id}>{params.value}</Button>)}
+        },
+        { field: 'col2', headerName: ' ', renderHeader: () => (<ChatBubbleOutline />), width: 100 },
+        { field: 'col3', headerName: ' ', renderHeader: () => (<FavoriteBorder />), width: 100 },
+        { field: 'col4', headerName: ' ', renderHeader: () => (<Visibility />), width: 100 },
+        { field: 'col5', headerName: '작성 시간', width: 200 },
     ];
+
+    useEffect(() => {
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                setLogin(true);
+                setName(user.email.split('@')[0]);
+                setSignInTime(changeTime(user.metadata.lastSignInTime));
+            } else {
+                // No user is signed in.
+                setLogin(false);
+            }
+        });
+    })
+
+
 
     const handleClick = (e) => {
         e.preventDefault();
         console.log('You clicked a breadcrumb.');
+    }
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        auth.signOut().then(() => {
+            // Sign-out successful.
+            window.location = '/';
+        }).catch((error) => {
+            // An error happened.
+            alert(error.code);
+        });
     }
 
 
@@ -64,16 +110,31 @@ export default function Main() {
                 <header className={classes.header}>
                     <div>Logo</div>
                     <Typography variant='h1'>Title</Typography>
-                    <div className="login-panel">
-                        <Button
-                            variant='contained'
-                            color='primary'
-                            startIcon={<AccountCircle />}
-                            component={Link}
-                            to="/Login"
-                        >
-                        Login
-                        </Button>
+                    <div className="login-panel" align='center'>
+                        {login ?
+                            <div>
+                                <Typography> Hello! {name} </Typography>
+                                <Typography> 최근 접속일: {signInTime} </Typography>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    startIcon={<AccountCircle />}
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </Button>
+                            </div>
+                            :
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                startIcon={<AccountCircle />}
+                                component={Link}
+                                to="/Login"
+                            >
+                                Login
+                            </Button>
+                        }
                     </div>
                 </header>
                 <div align='center'>
@@ -83,10 +144,6 @@ export default function Main() {
                                 <Button onClick={handleClick}>
                                     메인
                                 </Button>
-                                {/*<Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>*/}
-                                {/*    Core*/}
-                                {/*</Link>*/}
-                                {/*<Typography color="textPrimary">Breadcrumb</Typography>*/}
                             </Breadcrumbs>
                         </Grid>
                     </div>
@@ -105,7 +162,6 @@ export default function Main() {
                     </Grid>
                 </div>
             </div>
-
         </ThemeProvider>
     );
 }

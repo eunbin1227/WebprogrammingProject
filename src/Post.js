@@ -4,15 +4,11 @@ import {
     Typography,
     Grid,
     Breadcrumbs,
-    TextField,
     Box,
 } from '@material-ui/core';
 import {
     AccountCircle,
     NavigateNext,
-    CameraAltOutlined,
-    VideoCallOutlined,
-    AttachFileOutlined,
 } from '@material-ui/icons';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -22,8 +18,9 @@ import {useState} from 'react';
 import {firestore, timestamp, user} from "./firebase";
 
 
-export default function Write() {
+export default function Post() {
     const classes = useStyles();
+
     let userName = '익명'
     const [data, setData] = useState(undefined);
     const [title, setTitle] = useState('');
@@ -43,18 +40,6 @@ export default function Write() {
         console.log('You clicked a breadcrumb.');
     }
 
-    // const addFile = (e) => {
-    //     e.preventDefault();
-    //     const file = e.target.files[0];
-    //     const reader = new FileReader();
-    //
-    //     reader.onload = async (progressEvent) => {
-    //         const data = await progressEvent.target.result;
-    //         setData(data);
-    //     }
-    //     reader.readAsText(file);
-    // }
-
     return (
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
@@ -73,41 +58,14 @@ export default function Write() {
                                 메인
                             </Button>
                             <Button onClick={handleClick}>
-                                게시글 작성
+                                게시글
                             </Button>
                         </Breadcrumbs>
                     </Grid>
                     <Box className={classes.box}>
-                        <TextField
-                            id="title"
-                            label="제목"
-                            variant="outlined"
-                            onChange={e=>setTitle(e.target.value)}
-                        />
-                        <TextField
-                            id="body"
-                            label="내용"
-                            variant="outlined"
-                            onChange={e=>setBody(e.target.value)}
-                            rows={18}
-                            multiline
-                        />
+                        <Typography>제목</Typography>
+                        <Typography>내용</Typography>
                     </Box>
-                    <div align='left' style={{width: '80%'}}>
-                        <Button>
-                            <CameraAltOutlined />
-                            {/*<input*/}
-                            {/*    type="file"*/}
-                            {/*    onChange={addFile}*/}
-                            {/*    hidden/>*/}
-                        </Button>
-                        <Button>
-                            <VideoCallOutlined />
-                        </Button>
-                        <Button>
-                            <AttachFileOutlined />
-                        </Button>
-                    </div>
                     <div align='right' style={{width: '80%'}}>
                         <Button
                             component={Link}

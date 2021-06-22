@@ -12,12 +12,13 @@ const firebaseConfig = {
     measurementId: "G-G4BEL22EEG"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 const firestore = firebase.firestore();
+
+const auth = firebase.auth();
 const user = firebase.auth().currentUser;
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 // 필요한 곳에서 사용할 수 있도록 내보내기
-export { firestore, user, timestamp};
+export { firestore, user, timestamp, auth };
