@@ -50,14 +50,11 @@ export default function Post() {
     const handleWrite = (e) => {
         e.preventDefault();
         console.log(docid, name, data.comment, comment);
-        const preComment = data.comment
         const obj = {}
         obj['user'] = name;
         obj['comment'] = comment;
-        const newComment = preComment.push(obj)
-        // alert(Object.values(obj))
-        console.log(data.comment)
-        // writeComments(docid, newComment);
+        const newComment = obj;
+        writeComments(docid, newComment);
     }
 
     const handleClick = () => {
