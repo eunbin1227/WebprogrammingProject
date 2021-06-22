@@ -61,8 +61,8 @@ export default function Write() {
             <div className={classes.root}>
                 <CssBaseline />
                 <header className={classes.header}>
-                    <div>Logo</div>
-                    <Typography variant='h1'>Title</Typography>
+                    <div><img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img></div>
+                    <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
                     <div className="login-panel">
                         <AccountCircle />
                     </div>
@@ -90,7 +90,7 @@ export default function Write() {
                             label="내용"
                             variant="outlined"
                             onChange={e=>setBody(e.target.value)}
-                            rows={18}
+                            rows={21}
                             multiline
                         />
                     </Box>

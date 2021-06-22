@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import theme from './theme';
 import {useEffect, useState} from "react";
 import { getPost } from "./Api";
-import {firestore} from "./firebase";
+import { firestore } from "./firebase";
 import { auth } from './firebase';
 
 
@@ -86,7 +86,6 @@ export default function Main() {
     })
 
 
-
     const handleClick = (e) => {
         e.preventDefault();
         console.log('You clicked a breadcrumb.');
@@ -109,8 +108,8 @@ export default function Main() {
             <div className={classes.root}>
                 <CssBaseline />
                 <header className={classes.header}>
-                    <div>Logo</div>
-                    <Typography variant='h1'>Title</Typography>
+                    <div><img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img></div>
+                    <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
                     <div className="login-panel" align='center'>
                         {login ?
                             <div>
