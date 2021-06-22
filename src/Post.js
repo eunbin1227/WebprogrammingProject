@@ -85,8 +85,8 @@ export default function Post() {
                 <CssBaseline />
                 <header className={classes.header}>
                     <div><a href="/main">
-                    <img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img></div>
-                    </a>
+                    <img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img>
+                    </a></div>
                     <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
                     <div className="login-panel" align='center'>
                         {login ?
