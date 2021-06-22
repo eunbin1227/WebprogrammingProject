@@ -151,7 +151,7 @@ export default function Post() {
                             color={flag ? 'secondary' : 'default'}
                         ><FavoriteBorder align='left'/></Button>
                         <Grid container className={classes.commentList} align='left'>
-                            <Typography>댓글</Typography>
+                            <Typography></Typography>
                             {
                                 data ? data.comment.map((d) => <Typography key={d.user + d.comment}>{`${d.user} : ${d.comment}`}</Typography>) : console.log('s')
                             }
@@ -164,7 +164,7 @@ export default function Post() {
                             onChange={(e) => setComment(e.target.value)}
                             multiline
                         />
-                        <Button onClick={handleWrite}>
+                        <Button className={classes.btn} onClick={handleWrite} style = {{color:'white'}} >
                             게시
                         </Button>
                     </Box>
@@ -211,6 +211,9 @@ const useStyles = makeStyles(() => ({
     commentList: {
         display: 'flex',
         flexDirection: 'column',
+    },
+    btn: {
+        backgroundColor:'#2B60DE',
     }
 }));
 
