@@ -4,7 +4,7 @@ import {
     Typography,
     Grid,
     Breadcrumbs,
-    Box,
+    Box, TextField,
 } from '@material-ui/core';
 import {
     AccountCircle,
@@ -13,26 +13,39 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import {writePost} from "./Api";
-import {useState} from 'react';
-import {firestore, timestamp, user} from "./firebase";
+import {writeComments, writePost} from "./Api";
+import {useEffect, useState} from 'react';
+import {auth, firestore, timestamp, user} from "./firebase";
 
 
 export default function Post() {
     const classes = useStyles();
 
-    let userName = '익명'
     const [data, setData] = useState(undefined);
     const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+    const [comment, setComment] = useState('');
+    const [login, setLogin] = useState(undefined);
+    const [name, setName] = useState('');
 
-    if (user != null){
-        userName = user.displayName;
-    }
+
+    useEffect(() => {
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                setLogin(true);
+                setName(user.email.split('@')[0]);
+            } else {
+                // No user is signed in.
+                setLogin(false);
+                setName('익명');
+            }
+        });
+    })
+
 
     const handleWrite = (e) => {
         e.preventDefault();
-        writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
+        writeComments('post', {docid: '' , user: {name}, comment: {comment}});
         window.location.href ='/';
     }
 
@@ -40,15 +53,49 @@ export default function Post() {
         console.log('You clicked a breadcrumb.');
     }
 
+    const handleLogout = (e) => {
+        e.preventDefault();
+        auth.signOut().then(() => {
+            // Sign-out successful.
+            window.location = '/';
+        }).catch((error) => {
+            // An error happened.
+            alert(error.code);
+        });
+    }
+
+
     return (
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
                 <CssBaseline />
                 <header className={classes.header}>
-                    <div>Logo</div>
-                    <Typography variant='h1'>Title</Typography>
-                    <div className="login-panel">
-                        <AccountCircle />
+                    <div><img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img></div>
+                    <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
+                    <div className="login-panel" align='center'>
+                        {login ?
+                            <div>
+                                <Typography> Hello! {name} </Typography>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    startIcon={<AccountCircle />}
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </Button>
+                            </div>
+                            :
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                startIcon={<AccountCircle />}
+                                component={Link}
+                                to="/Login"
+                            >
+                                Login
+                            </Button>
+                        }
                     </div>
                 </header>
                 <div align='center' >
@@ -62,21 +109,22 @@ export default function Post() {
                             </Button>
                         </Breadcrumbs>
                     </Grid>
-                    <Box className={classes.box}>
+                    <Box className={classes.box} >
                         <Typography>제목</Typography>
                         <Typography>내용</Typography>
-                    </Box>
-                    <div align='right' style={{width: '80%'}}>
-                        <Button
-                            component={Link}
-                            to='/'
-                        >
-                            취소
-                        </Button>
+                        <TextField
+                            id="comment"
+                            label="댓글"
+                            variant="outlined"
+                            rows={10}
+                            onChange={(e) => setComment(e.target.value)}
+                            multiline
+                        />
                         <Button onClick={handleWrite}>
                             게시
                         </Button>
-                    </div>
+                    </Box>
+
                 </div>
             </div>
         </ThemeProvider>
