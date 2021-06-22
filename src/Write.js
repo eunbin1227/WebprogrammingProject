@@ -6,6 +6,11 @@ import {
     Breadcrumbs,
     TextField,
     Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+
 } from '@material-ui/core';
 import {
     AccountCircle,
@@ -20,10 +25,6 @@ import theme from './theme';
 import {writePost, uploadImage} from "./Api";
 import {useState} from 'react';
 import {firestore, timestamp, user} from "./firebase";
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 
 export default function Write() {
     const classes = useStyles();
@@ -31,7 +32,7 @@ export default function Write() {
     const [data, setData] = useState(undefined);
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-    const [location, setLocation] = useState ('')
+    const [area, setArea] = useState ('')
 
     if (user != null){
         userName = user.displayName;
@@ -40,9 +41,9 @@ export default function Write() {
     const handleWrite = (e) => {
         e.preventDefault();
 
-        console.log(title,body,userName,timestamp);
-        writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
-        window.location.href ='/';
+        console.log(title,body,userName,timestamp, area);
+        writePost('post', {title: title, body: body, author: userName, createdAt: timestamp, area: area});
+        setTimeout(() => {window.location.href='/'}, 1000);
     }
 
     const handleClick = () => {
@@ -50,7 +51,7 @@ export default function Write() {
     }
 
     const handleChange = (event) => {
-        setLocation(event.target.value);
+        setArea(event.target.value);
     };
 
     // const addFile = (e) => {
@@ -113,7 +114,7 @@ export default function Write() {
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={location}
+                                value={area}
                                 onChange={handleChange}
                             >
                                 <MenuItem>인문대 1동</MenuItem>

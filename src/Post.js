@@ -49,9 +49,12 @@ export default function Post() {
 
     const handleWrite = (e) => {
         e.preventDefault();
-        console.log(docid, name, comment);
-        writeComments(docid, name, comment);
-        window.location.href ='/';
+        console.log(docid, name, data.comment, comment);
+        const obj = {}
+        obj['user'] = name;
+        obj['comment'] = comment;
+        const newComment = obj;
+        writeComments(docid, newComment);
     }
 
     const handleClick = () => {
