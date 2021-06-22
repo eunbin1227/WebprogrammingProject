@@ -17,7 +17,7 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import {writePost} from "./Api";
+import {writePost, uploadImage} from "./Api";
 import {useState} from 'react';
 import {firestore, timestamp, user} from "./firebase";
 
@@ -35,6 +35,7 @@ export default function Write() {
 
     const handleWrite = (e) => {
         e.preventDefault();
+
         writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
         window.location.href ='/';
     }
@@ -52,7 +53,7 @@ export default function Write() {
     //         const data = await progressEvent.target.result;
     //         setData(data);
     //     }
-    //     reader.readAsText(file);
+    //     // reader.readAsText(file);
     // }
 
     return (
@@ -96,10 +97,11 @@ export default function Write() {
                     <div align='left' style={{width: '80%'}}>
                         <Button>
                             <CameraAltOutlined />
-                            {/*<input*/}
-                            {/*    type="file"*/}
-                            {/*    onChange={addFile}*/}
-                            {/*    hidden/>*/}
+                            <input
+                                // type="file"
+                                // onChange={addFile}
+                                hidden
+                                />
                         </Button>
                         <Button>
                             <VideoCallOutlined />

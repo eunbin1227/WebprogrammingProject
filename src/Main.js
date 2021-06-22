@@ -22,6 +22,7 @@ import {firestore} from "./firebase";
 import { auth } from './firebase';
 
 
+
 export default function Main() {
     const classes = useStyles();
     const [data, setData] = useState([])
@@ -62,7 +63,7 @@ export default function Main() {
             field: 'col1',
             headerName: '제목',
             width: 600,
-            renderCell: (params) => {return (<Button component={Link} to={'/Main/Post/'+params.id}>{params.value}</Button>)}
+            renderCell: (params) => {return (<Button component={Link} to={'/Main/Post?'+params.id}>{params.value}</Button>)}
         },
         { field: 'col2', headerName: ' ', renderHeader: () => (<ChatBubbleOutline />), width: 100 },
         { field: 'col3', headerName: ' ', renderHeader: () => (<FavoriteBorder />), width: 100 },

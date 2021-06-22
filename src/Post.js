@@ -14,7 +14,7 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
 import {writePost} from "./Api";
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {firestore, timestamp, user} from "./firebase";
 
 
@@ -40,6 +40,15 @@ export default function Post() {
         console.log('You clicked a breadcrumb.');
     }
 
+    useEffect(async ()=>{
+        const docid = window.location.search.split('?')[1]
+        await firestore.collection('post').doc(docid).get().then((doc) => {
+            console.log(doc.data())
+            setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: doc.data().comment, like: doc.data().like})
+        })
+        console.log(data)
+    },[])
+
     return (
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
@@ -64,7 +73,9 @@ export default function Post() {
                     </Grid>
                     <Box className={classes.box}>
                         <Typography>제목</Typography>
+                        <Typography>{data.title}</Typography>
                         <Typography>내용</Typography>
+                        <Typography>{data.body}</Typography>
                     </Box>
                     <div align='right' style={{width: '80%'}}>
                         <Button
