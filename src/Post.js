@@ -16,7 +16,7 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import {writeComments, writePost} from "./Api";
+import {pushLike, writeComments, writePost} from "./Api";
 import {useEffect, useState} from 'react';
 import {auth, firestore, timestamp, user} from "./firebase";
 
@@ -72,7 +72,15 @@ export default function Post() {
         await firestore.collection('post').doc(id).get().then((doc) => {
             setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: Object.values(doc.data().comment), like: doc.data().like})
         })
+    },[flag])
+
+    useEffect(()=> {
+        setTimeout(()=>{
+            console.log(data)
+            {data && data.like.includes(name) ? setFlag(true) : setFlag(false)}
+        }, 100)
     },[])
+
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -86,7 +94,8 @@ export default function Post() {
     }
 
     const handleHeart = () => {
-        setFlag(!flag);
+        pushLike(docid, name)
+        setFlag(!flag)
     }
 
 
@@ -143,8 +152,8 @@ export default function Post() {
                         <Button
                             style={{maxWidth: '5px', marginBottom: '20px'}}
                             onClick={handleHeart}
-                            color={flag ? 'secondary' : 'default'}
-                        ><FavoriteBorder align='left'/></Button>
+                            color={flag ? 'default' : 'default'}
+                        ><FavoriteBorder align='left'/>{data && data.like.length}</Button>
                         <Grid container className={classes.commentList} align='left'>
                             {
                                 data ? data.comment.map((d) => <Typography key={d.user + d.comment}>{`${d.user} : ${d.comment}`}</Typography>) : console.log('s')

@@ -8,6 +8,10 @@ import {
     Box,
     IconButton,
     Checkbox,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
 } from '@material-ui/core';
 import {
     AccountCircle,
@@ -24,6 +28,7 @@ import {useEffect, useState} from 'react';
 import {auth, timestamp, fstorage, firebaseConfig, firebaseApp} from "./firebase";
 import ReactFirebaseImageUploader from "react-firebase-image-upload-control";
 
+
 export default function Write() {
     const classes = useStyles();
 
@@ -33,6 +38,7 @@ export default function Write() {
     const [name, setName] = useState('');
     const [login, setLogin] = useState(undefined);
     const [file, setFile] = useState(null);
+    const [location, setLocation] = useState('');
 
 
     useEffect(() => {
@@ -51,7 +57,8 @@ export default function Write() {
 
     const handleWrite = (e) => {
         e.preventDefault();
-        writePost('post', {title: title, body: body, author: name, createdAt: timestamp});
+        console.log(title,body,name,timestamp,location)
+        writePost('post', {title: title, body: body, author: name, createdAt: timestamp, location: location });
         setTimeout(() => {window.location.href='/'}, 1000);
     }
 
@@ -71,7 +78,6 @@ export default function Write() {
     }
 
 
-
     const addFile = () => {
 
     }
@@ -79,6 +85,7 @@ export default function Write() {
     const handleUpload = () => {
 
     }
+
 
 
     return (
@@ -116,7 +123,8 @@ export default function Write() {
                         }
                     </div>
                 </header>
-                <div align='center' >
+
+                <div align='center'>
                     <Grid className={classes.bread}>
                         <Breadcrumbs separator={<NavigateNext fontSize="small" />} aria-label="breadcrumb" className={classes.breadItem}>
                             <Button component={Link} to="/" onClick={handleClick}>
@@ -139,7 +147,8 @@ export default function Write() {
                             label="내용"
                             variant="outlined"
                             onChange={e=>setBody(e.target.value)}
-                            rows={20}
+                            rows={25}
+
                             multiline
                         />
                     </Box>
@@ -164,6 +173,41 @@ export default function Write() {
                             }}
                             multiple
                         />
+                    <div>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="demo-simple-select-label">Location</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={location}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value="인문대 1동">인문대 1동</MenuItem>
+                                <MenuItem value="사회과학대학 16동">사회과학대학 16동</MenuItem>
+                                <MenuItem value="글로벌 공학 교육 센터 38동">글로벌 공학 교육 센터 38동</MenuItem>
+                                <MenuItem value="경영대학 58동">경영대학 58동 </MenuItem>
+                                <MenuItem value="농업생명과학대학 200동">농업생명과학대학 200동 </MenuItem>
+                                <MenuItem value="생활과학대학 220동">생활과학대학 220동</MenuItem>
+                                <MenuItem value="기숙사 919동">기숙사 919동</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+//                     <div align='left' style={{width: '80%'}}>
+//                         <Button>
+//                             <CameraAltOutlined />
+//                             <input
+//                                 // type="file"
+//                                 // onChange={addFile}
+//                                 hidden
+//                                 />
+//                         </Button>
+//                         <Button>
+//                             <VideoCallOutlined />
+//                         </Button>
+//                         <Button>
+//                             <AttachFileOutlined />
+//                         </Button>
                     </div>
                     <div align='right' style={{width: '80%'}}>
                         <Button
@@ -215,7 +259,16 @@ const useStyles = makeStyles(() => ({
     },
     button: {
 
-    }
+    },
+
+    formControl: {
+        display: 'flex',
+        width: '80%',
+        height: '80%',
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
 }));
 
 
