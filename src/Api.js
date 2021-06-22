@@ -1,7 +1,5 @@
 import {firestore, fstorage, ffieldvalue} from './firebase'
 import firebase from 'firebase/app';
-
-
 const db = firestore
 
 const writePost = (collection, contents) =>{
@@ -35,7 +33,6 @@ const deletePost = (docid) => {
         console.error('Error removing doc: ', error)
     })
 }
-
 
 const writeComments = (docid, user, comment) => {
     db.collection('post').doc(docid).update({
