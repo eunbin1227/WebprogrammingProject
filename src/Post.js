@@ -74,9 +74,13 @@ export default function Post() {
         })
     },[])
 
-    setTimeout(()=>{
-        {data && data.like.includes(name) ? setFlag(true) : setFlag(false)}
-    }, 100)
+    useEffect(()=> {
+        setTimeout(()=>{
+            console.log(data)
+            {data && data.like.includes(name) ? setFlag(true) : setFlag(false)}
+        }, 1000)
+    })
+
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -90,8 +94,8 @@ export default function Post() {
     }
 
     const handleHeart = () => {
-        setFlag(!flag)
         pushLike(docid, name)
+        setFlag(!flag)
     }
 
 
