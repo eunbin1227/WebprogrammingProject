@@ -17,9 +17,9 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import {writePost, uploadImage} from "./Api";
+import { writePost } from "./Api";
 import {useEffect, useState} from 'react';
-import {auth, firestore, timestamp, user} from "./firebase";
+import {auth, timestamp} from "./firebase";
 
 
 export default function Write() {
@@ -28,6 +28,8 @@ export default function Write() {
     const [data, setData] = useState(undefined);
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [name, setName] = useState('');
+    const [login, setLogin] = useState(undefined);
 
 
     useEffect(() => {
@@ -46,12 +48,24 @@ export default function Write() {
 
     const handleWrite = (e) => {
         e.preventDefault();
-        writePost('post', {title: title, body: body, author: userName, createdAt: timestamp});
-        window.location.href ='/';
+        writePost('post', {title: title, body: body, author: name, createdAt: timestamp});
+        setTimeout(() => {window.location.href='/'}, 1000);
     }
 
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
+        console.log(name);
+    }
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        auth.signOut().then(() => {
+            // Sign-out successful.
+            window.location = '/';
+        }).catch((error) => {
+            // An error happened.
+            alert(error.code);
+        });
     }
 
     // const addFile = (e) => {
@@ -75,8 +89,30 @@ export default function Write() {
                         <img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img>
                     </a></div>
                     <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
-                    <div className="login-panel">
-                        <AccountCircle />
+                    <div className="login-panel" align='center'>
+                        {login ?
+                            <div>
+                                <Typography> Hello! {name} </Typography>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    startIcon={<AccountCircle />}
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </Button>
+                            </div>
+                            :
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                startIcon={<AccountCircle />}
+                                component={Link}
+                                to="/Login"
+                            >
+                                Login
+                            </Button>
+                        }
                     </div>
                 </header>
                 <div align='center' >
@@ -102,7 +138,7 @@ export default function Write() {
                             label="내용"
                             variant="outlined"
                             onChange={e=>setBody(e.target.value)}
-                            rows={21}
+                            rows={20}
                             multiline
                         />
                     </Box>
