@@ -32,6 +32,7 @@ export default function Post() {
     const [name, setName] = useState('');
     const [docid, setDocid] = useState('');
     const [flag, setFlag] = useState(false);
+    const [likeCount, setLikeCount] = useState(undefined)
 
 
     useEffect(() => {
@@ -71,8 +72,11 @@ export default function Post() {
         setDocid(window.location.search.split('?')[1]);
         await firestore.collection('post').doc(id).get().then((doc) => {
             setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: Object.values(doc.data().comment), like: doc.data().like})
+            setLikeCount(doc.data().like.length)
         })
+        console.log(likeCount)
     },[flag])
+
 
     useEffect(()=> {
         setTimeout(()=>{
@@ -93,7 +97,7 @@ export default function Post() {
         });
     }
 
-    const handleHeart = () => {
+    const handleHeart = async() => {
         pushLike(docid, name)
         setFlag(!flag)
     }
@@ -152,8 +156,8 @@ export default function Post() {
                         <Button
                             style={{maxWidth: '5px', marginBottom: '20px'}}
                             onClick={handleHeart}
-                            color={flag ? 'default' : 'default'}
-                        ><FavoriteBorder align='left'/>{data && data.like.length}</Button>
+                            color='default'
+                        ><FavoriteBorder align='left'/>{likeCount}</Button>
                         <Grid container className={classes.commentList} align='left'>
                             {
                                 data ? data.comment.map((d) => <Typography key={d.user + d.comment}>{`${d.user} : ${d.comment}`}</Typography>) : console.log('s')
