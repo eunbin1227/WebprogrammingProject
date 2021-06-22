@@ -10,7 +10,6 @@ import {
     InputLabel,
     Select,
     MenuItem,
-
 } from '@material-ui/core';
 import {
     AccountCircle,
@@ -22,36 +21,60 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import {writePost, uploadImage} from "./Api";
-import {useState} from 'react';
-import {firestore, timestamp, user} from "./firebase";
+import { writePost } from "./Api";
+import {useEffect, useState} from 'react';
+import {auth, timestamp} from "./firebase";
 
 export default function Write() {
     const classes = useStyles();
-    let userName = '익명'
+
     const [data, setData] = useState(undefined);
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-    const [area, setArea] = useState ('')
+    const [name, setName] = useState('');
+    const [login, setLogin] = useState(undefined);
+    const [location, setLocation] = useState('');
 
-    if (user != null){
-        userName = user.displayName;
-    }
+
+    useEffect(() => {
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                setLogin(true);
+                setName(user.email.split('@')[0]);
+            } else {
+                // No user is signed in.
+                setLogin(false);
+                setName('익명');
+            }
+        });
+    })
 
     const handleWrite = (e) => {
         e.preventDefault();
-
-        console.log(title,body,userName,timestamp, area);
-        writePost('post', {title: title, body: body, author: userName, createdAt: timestamp, area: area});
+        console.log(title,body,name,timestamp,location)
+        writePost('post', {title: title, body: body, author: name, createdAt: timestamp, location: location });
         setTimeout(() => {window.location.href='/'}, 1000);
     }
 
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
+        console.log(name);
+    }
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        auth.signOut().then(() => {
+            // Sign-out successful.
+            window.location = '/';
+        }).catch((error) => {
+            // An error happened.
+            alert(error.code);
+        });
     }
 
     const handleChange = (event) => {
-        setArea(event.target.value);
+        setLocation(event.target.value);
     };
 
     // const addFile = (e) => {
@@ -75,8 +98,30 @@ export default function Write() {
                         <img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img>
                     </a></div>
                     <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
-                    <div className="login-panel">
-                        <AccountCircle />
+                    <div className="login-panel" align='center'>
+                        {login ?
+                            <div>
+                                <Typography> Hello! {name} </Typography>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    startIcon={<AccountCircle />}
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </Button>
+                            </div>
+                            :
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                startIcon={<AccountCircle />}
+                                component={Link}
+                                to="/Login"
+                            >
+                                Login
+                            </Button>
+                        }
                     </div>
                 </header>
 
@@ -104,6 +149,7 @@ export default function Write() {
                             variant="outlined"
                             onChange={e=>setBody(e.target.value)}
                             rows={25}
+
                             multiline
                         />
                     </Box>
@@ -114,16 +160,16 @@ export default function Write() {
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={area}
+                                value={location}
                                 onChange={handleChange}
                             >
-                                <MenuItem>인문대 1동</MenuItem>
-                                <MenuItem>사회과학대학 16동</MenuItem>
-                                <MenuItem>글로벌 공학 교육 센터 38동</MenuItem>
-                                <MenuItem>경영대학 58동 </MenuItem>
-                                <MenuItem>농업생명과학대학 200동 </MenuItem>
-                                <MenuItem>생활과학대학 220동</MenuItem>
-                                <MenuItem>기숙사 919동</MenuItem>
+                                <MenuItem value="인문대 1동">인문대 1동</MenuItem>
+                                <MenuItem value="사회과학대학 16동">사회과학대학 16동</MenuItem>
+                                <MenuItem value="글로벌 공학 교육 센터 38동">글로벌 공학 교육 센터 38동</MenuItem>
+                                <MenuItem value="경영대학 58동">경영대학 58동 </MenuItem>
+                                <MenuItem value="농업생명과학대학 200동">농업생명과학대학 200동 </MenuItem>
+                                <MenuItem value="생활과학대학 220동">생활과학대학 220동</MenuItem>
+                                <MenuItem value="기숙사 919동">기숙사 919동</MenuItem>
                             </Select>
                         </FormControl>
                     </div>

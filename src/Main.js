@@ -49,15 +49,14 @@ export default function Main() {
     }
 
 
-    const rows = data.map(d => {
+    const rows = data ? data.map(d => {
         return {
             id: d.id,
             col1: d.detail.title,
             col2: d.comment.length,
             col3: d.like.length,
-            col4: 0,
+            col4: d.detail.location,
             col5: changeSecond(d.detail.createdAt.seconds)}
-    })
 
     const columns = [
         {

@@ -1,6 +1,6 @@
 import {firestore, fstorage, ffieldvalue} from './firebase'
 import firebase from 'firebase/app';
-const db = firestore
+const db = firestore;
 
 const writePost = (collection, contents) =>{
     db.collection(collection).add({
