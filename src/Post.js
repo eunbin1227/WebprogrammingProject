@@ -51,6 +51,24 @@ export default function Post() {
     })
 
 
+    useEffect(() => {
+        console.log('run');
+        fstorage.ref().child(docid).listAll().then((res) => {
+            res.items.forEach((imageRef) => {
+                 displayImage(imageRef);
+            })
+        });
+
+        function displayImage(imageRef) {
+            imageRef.getDownloadURL().then(function (url) {
+                setURLs(oldArray => [...oldArray, url]);
+            }).catch(function (error) {
+                // Handle any errors
+            });
+        }
+    }, [docid])
+
+
     const handleWrite = (e) => {
         e.preventDefault();
         console.log(docid, name, data.comment, comment);
@@ -67,7 +85,6 @@ export default function Post() {
         console.log(urls)
     }
 
-
     useEffect(async()=>{
         const id = window.location.search.split('?')[1];
         setDocid(window.location.search.split('?')[1]);
@@ -78,29 +95,12 @@ export default function Post() {
         })
     },[])
 
-    useEffect(async() => {
-        fstorage.ref().child(docid).listAll().then((res) => {
-            res.items.forEach((imageRef) => {
-                displayImage(imageRef);
-            })
-        });
-
-        function displayImage(imageRef) {
-            imageRef.getDownloadURL().then(function (url) {
-                setURLs(oldArray => [...oldArray, url]);
-            }).catch(function (error) {
-                // Handle any errors
-            });
-        }
-
-        //console.log(await fstorage.ref().child('kpTgtgGywVVxYlcDmrHQ/다운로드.jpg').getDownloadURL());
-    }, [])
-
 
 
     useEffect(()=> {
         {likeArray.includes(name) ? setFlag(true):setFlag(false)}
     }, [likeArray])
+
 
     const handleLogout = (e) => {
         e.preventDefault();
