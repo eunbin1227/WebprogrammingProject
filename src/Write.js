@@ -6,7 +6,6 @@ import {
     Breadcrumbs,
     TextField,
     Box,
-    IconButton,
     Checkbox,
     FormControl,
     InputLabel,
@@ -16,16 +15,15 @@ import {
 import {
     AccountCircle,
     NavigateNext,
-    CameraAltOutlined,
     CloudUpload,
     Delete,
 } from '@material-ui/icons';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import {writePost, writePostWithID} from "./Api";
+import { writePostWithID } from "./Api";
 import {useEffect, useState} from 'react';
-import {auth, timestamp, fstorage, firebaseConfig, firebaseApp, firestore} from "./firebase";
+import {auth, timestamp, firebaseApp, firestore} from "./firebase";
 import ReactFirebaseImageUploader from "react-firebase-image-upload-control";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -71,7 +69,6 @@ export default function Write() {
     }
 
     const handleClick = () => {
-        console.log(id);
         console.log('You clicked a breadcrumb.');
     }
 
@@ -249,12 +246,6 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         width: '80%',
         flexDirection: 'column',
-    },
-    input: {
-
-    },
-    button: {
-
     },
     formControl: {
         display: 'flex',

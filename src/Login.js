@@ -28,13 +28,10 @@ export default function Login() {
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                console.log(user);
                 window.location = '/';
-                // ...
             })
             .catch((error) => {
                 const errorCode = error.code;
-                //const errorMessage = error.message;
 
                 if(errorCode === 'auth/wrong-password') {
                     alert('비밀번호를 확인해주세요!');

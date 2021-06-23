@@ -31,13 +31,10 @@ export default function SignUp() {
                 const user = userCredential.user;
                 alert('회원가입이 완료되었습니다!');
                 window.location = '/Login';
-                // ...
             })
             .catch((error) => {
                 const errorCode = error.code;
-                //const errorMessage = error.message;
                 alert(errorCode);
-                // ..
             });
     }
 
