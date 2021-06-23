@@ -107,7 +107,7 @@ export default function Post() {
                     <div><a href="/main">
                     <img alt="logo" src="https://i.ibb.co/wBBLgXq/2021-06-23-2-59-26.png"  border="0" width="100" height="100"></img>
                     </a></div>
-                    <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
+                    <Typography variant='h4'>서울대학교 물품 공유 커뮤니티</Typography>
                     <div className="login-panel" align='center'>
                         {login ?
                             <div>
