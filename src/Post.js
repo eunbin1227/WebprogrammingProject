@@ -80,11 +80,7 @@ export default function Post() {
 
 
     useEffect(()=> {
-        console.log(likeArray)
         {likeArray.includes(name) ? setFlag(true):setFlag(false)}
-        if (flag != undefined) {
-            console.log(flag, name, likeCount)
-        }
     }, [likeArray])
 
     const handleLogout = (e) => {
