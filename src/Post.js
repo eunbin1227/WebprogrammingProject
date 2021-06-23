@@ -31,9 +31,9 @@ export default function Post() {
     const [login, setLogin] = useState(undefined);
     const [name, setName] = useState('');
     const [docid, setDocid] = useState('');
-    const [flag, setFlag] = useState(false);
-    const [likeCount, setLikeCount] = useState(undefined)
-
+    const [flag, setFlag] = useState(undefined);
+    const [likeCount, setLikeCount] = useState(0)
+    const [likeArray, setLikeArray] = useState([])
 
     useEffect(() => {
         auth.onAuthStateChanged(function(user) {
@@ -73,18 +73,19 @@ export default function Post() {
         await firestore.collection('post').doc(id).get().then((doc) => {
             setData({body: doc.data().contents.body, author: doc.data().contents.author, title: doc.data().contents.title, createdAt: doc.data().contents.createdAt, comment: Object.values(doc.data().comment), like: doc.data().like})
             setLikeCount(doc.data().like.length)
+            setLikeArray(doc.data().like)
         })
-        console.log(likeCount)
-    },[flag])
+    },[])
+
 
 
     useEffect(()=> {
-        setTimeout(()=>{
-            console.log(data)
-            {data && data.like.includes(name) ? setFlag(true) : setFlag(false)}
-        }, 100)
-    },[])
-
+        console.log(likeArray)
+        {likeArray.includes(name) ? setFlag(true):setFlag(false)}
+        if (flag != undefined) {
+            console.log(flag, name, likeCount)
+        }
+    }, [likeArray])
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -100,6 +101,7 @@ export default function Post() {
     const handleHeart = async() => {
         pushLike(docid, name)
         setFlag(!flag)
+        {flag ? setLikeCount(likeCount -1 ) : setLikeCount(likeCount+ 1)}
     }
 
 
@@ -156,7 +158,7 @@ export default function Post() {
                         <Button
                             style={{maxWidth: '5px', marginBottom: '20px'}}
                             onClick={handleHeart}
-                            color='default'
+                            color={flag? 'secondary': 'default'}
                         ><FavoriteBorder align='left'/>{likeCount}</Button>
                         <Grid container className={classes.commentList} align='left'>
                             {
