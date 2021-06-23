@@ -105,7 +105,7 @@ export default function Post() {
                 <CssBaseline />
                 <header className={classes.header}>
                     <div><a href="/main">
-                    <img alt="logo" src="https://ifh.cc/g/SsvCZf.png" border="0" width="100" height="100"></img>
+                    <img alt="logo" src="https://i.ibb.co/wBBLgXq/2021-06-23-2-59-26.png"  border="0" width="100" height="100"></img>
                     </a></div>
                     <Typography variant='h4'>서울대학교 물품 거래 커뮤니티</Typography>
                     <div className="login-panel" align='center'>
@@ -167,7 +167,7 @@ export default function Post() {
                             onChange={(e) => setComment(e.target.value)}
                             multiline
                         />
-                        <Button onClick={handleWrite}>
+                        <Button className={classes.btn} onClick={handleWrite} style = {{color:'white'}}>
                             게시
                         </Button>
                     </Box>
@@ -214,6 +214,9 @@ const useStyles = makeStyles(() => ({
     commentList: {
         display: 'flex',
         flexDirection: 'column',
+    },
+    btn: {
+        backgroundColor: 'blue',
     }
 }));
 
