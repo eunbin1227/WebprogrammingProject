@@ -99,11 +99,7 @@ export default function Post() {
 
 
     useEffect(()=> {
-        console.log(likeArray)
         {likeArray.includes(name) ? setFlag(true):setFlag(false)}
-        if (flag != undefined) {
-            console.log(flag, name, likeCount)
-        }
     }, [likeArray])
 
     const handleLogout = (e) => {
@@ -118,6 +114,10 @@ export default function Post() {
     }
 
     const handleHeart = async() => {
+        if (name == '익명') {
+            alert('좋아요를 누르시려면 로그인이 필요합니다!')
+            return
+        }
         pushLike(docid, name)
         setFlag(!flag)
         {flag ? setLikeCount(likeCount -1 ) : setLikeCount(likeCount+ 1)}
