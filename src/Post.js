@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import theme from './theme';
 import {pushLike, writeComments, writePost} from "./Api";
 import {useEffect, useState} from 'react';
-import {auth, firestore, timestamp, user} from "./firebase";
+import {auth, firestore, timestamp, user, fstorage} from "./firebase";
 
 
 
@@ -34,6 +34,7 @@ export default function Post() {
     const [flag, setFlag] = useState(undefined);
     const [likeCount, setLikeCount] = useState(0)
     const [likeArray, setLikeArray] = useState([])
+    const [urls, setURLs] = useState([]);
 
     useEffect(() => {
         auth.onAuthStateChanged(function(user) {
@@ -63,7 +64,7 @@ export default function Post() {
 
     const handleClick = () => {
         console.log('You clicked a breadcrumb.');
-        console.log(data);
+        console.log(urls)
     }
 
 
@@ -76,6 +77,24 @@ export default function Post() {
             setLikeArray(doc.data().like)
         })
     },[])
+
+    useEffect(async() => {
+        fstorage.ref().child(docid).listAll().then((res) => {
+            res.items.forEach((imageRef) => {
+                displayImage(imageRef);
+            })
+        });
+
+        function displayImage(imageRef) {
+            imageRef.getDownloadURL().then(function (url) {
+                setURLs(oldArray => [...oldArray, url]);
+            }).catch(function (error) {
+                // Handle any errors
+            });
+        }
+
+        //console.log(await fstorage.ref().child('kpTgtgGywVVxYlcDmrHQ/다운로드.jpg').getDownloadURL());
+    }, [])
 
 
 
@@ -154,6 +173,11 @@ export default function Post() {
                     <Box className={classes.box} >
                         <Typography variant ='h4' className={classes.title}>{data ? data.title: console.log('ㅜㅜ')}</Typography>
                         <Typography align="right" className={classes.title}>작성자: {data ? data.author: console.log('dd')}</Typography>
+                        <div align='center'>
+                            {
+                                urls.map((url) => (<img alt="" src={url} key={url} width="800" height="400"></img>))
+                            }
+                        </div>
                         <Typography className={classes.body}>{data ? data.body: console.log('ㅜㅜ')}</Typography>
                         <Button
                             style={{maxWidth: '5px', marginBottom: '20px'}}
