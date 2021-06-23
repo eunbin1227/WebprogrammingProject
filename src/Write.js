@@ -96,10 +96,10 @@ export default function Write() {
                 <CssBaseline />
                 <header className={classes.header}>
                     <div><a href="/main">
-                        <img alt="logo" src="https://i.ibb.co/wBBLgXq/2021-06-23-2-59-26.png" 시rp
+                        <img alt="logo" src="https://i.ibb.co/wBBLgXq/2021-06-23-2-59-26.png"
                              border="0" width="100" height="100"></img>
                     </a></div>
-                    <Typography variant='h4'>서울대학교 물품 공유 커뮤니티</Typography>
+                    <Typography variant='h4'>서울대학교 물품 공 커뮤니티</Typography>
                     <div className="login-panel" align='center'>
                         {login ?
                             <div>
@@ -189,8 +189,11 @@ export default function Write() {
                                     progressControlWrapper: { height: "40px", width: "40px" }
                                 }
                             }}
+                            uploadStartCallback={status => {
+                                console.log(status);
+                            }}
                             uploadCompleteCallback={statusObj => {
-                                console.log("uploadCompleteCallback triggered, and we're done!, statusObj", statusObj);
+                                console.log(statusObj);
                             }}
                             multiple
                         />
