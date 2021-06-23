@@ -16,7 +16,6 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
 import {useEffect, useState} from "react";
-import { getPost } from "./Api";
 import { firestore } from "./firebase";
 import { auth } from './firebase';
 

@@ -6,7 +6,6 @@ import {
     Breadcrumbs,
     Box,
     TextField,
-    Paper
 } from '@material-ui/core';
 import {
     AccountCircle,
@@ -16,9 +15,9 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import {pushLike, writeComments, writePost} from "./Api";
+import { pushLike, writeComments } from "./Api";
 import {useEffect, useState} from 'react';
-import {auth, firestore, timestamp, user, fstorage} from "./firebase";
+import {auth, firestore, fstorage} from "./firebase";
 
 
 
@@ -26,7 +25,6 @@ export default function Post() {
     const classes = useStyles();
 
     const [data, setData] = useState(undefined);
-    const [title, setTitle] = useState('');
     const [comment, setComment] = useState('');
     const [login, setLogin] = useState(undefined);
     const [name, setName] = useState('');
@@ -171,14 +169,14 @@ export default function Post() {
                         </Breadcrumbs>
                     </Grid>
                     <Box className={classes.box} >
-                        <Typography variant ='h4' className={classes.title}>{data ? data.title: console.log('ㅜㅜ')}</Typography>
-                        <Typography align="right" className={classes.title}>작성자: {data ? data.author: console.log('dd')}</Typography>
+                        <Typography variant ='h4' className={classes.title}>{data ? data.title: console.log('No Title')}</Typography>
+                        <Typography align="right" className={classes.title}>작성자: {data ? data.author: console.log('No Author')}</Typography>
                         <div align='center'>
                             {
                                 urls.map((url) => (<img alt="" src={url} key={url} width="800" height="400"></img>))
                             }
                         </div>
-                        <Typography className={classes.body}>{data ? data.body: console.log('ㅜㅜ')}</Typography>
+                        <Typography className={classes.body}>{data ? data.body: console.log('No body')}</Typography>
                         <Button
                             style={{maxWidth: '5px', marginBottom: '20px'}}
                             onClick={handleHeart}
