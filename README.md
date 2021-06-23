@@ -3,7 +3,7 @@
 ### 4조 강은빈 김언정 최연주 류영지
 
 ###### giturl : https://github.com/eunbin1227/WebprogrammingProject.git
-###### 실행가능한 url : 
+###### 실행가능한 url : http://gajimarket.surge.sh
 
 ------------------------------
 
