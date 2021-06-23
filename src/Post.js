@@ -95,6 +95,10 @@ export default function Post() {
     }
 
     const handleHeart = async() => {
+        if (name == '익명') {
+            alert('좋아요를 누르시려면 로그인이 필요합니다!')
+            return
+        }
         pushLike(docid, name)
         setFlag(!flag)
         {flag ? setLikeCount(likeCount -1 ) : setLikeCount(likeCount+ 1)}
