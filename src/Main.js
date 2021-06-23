@@ -45,7 +45,7 @@ export default function Main() {
 
 
     const changeSecond = (input) => {
-        return new Date(input * 1000).toISOString().substr(11, 8) + " GMT"
+        return new Date(input * 1000 - 54000000).toISOString().substr(11, 8)
     }
 
 
