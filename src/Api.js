@@ -16,6 +16,20 @@ const writePost = (collection, contents) =>{
         });
 }
 
+const writePostWithID = (id, collection, contents) =>{
+    db.collection(collection).doc(id).set({
+        contents,
+        comment:[],
+        like: []
+    })
+        .then((docRef) => {
+            console.log('Doc written with ID: ', docRef.id);
+        })
+        .catch((error) => {
+            console.error('Error adding doc: ', error);
+        });
+}
+
 const getPost = (collection) => {
     db.collection(collection).get().then((querySnapshot) => {
         return querySnapshot.docs.map(doc=>{
@@ -37,7 +51,7 @@ const deletePost = (docid) => {
 
 const writeComments = (docid, comment) => {
     db.collection('post').doc(docid).update({
-    comment : ffieldvalue.arrayUnion(comment)
+        comment : ffieldvalue.arrayUnion(comment)
     });
 }
 
@@ -56,7 +70,7 @@ const pushLike = (docid, user) => {
                     like: ffieldvalue.arrayUnion(user)
                 })
             }
-    }})
+        }})
 
 }
 
@@ -68,33 +82,34 @@ const uploadImage = (file) => {
     const uploadTask = storageRef.child('image/'+file).put(file, metadata);
     uploadTask.on(firebase.storage.TaskEvent.state_changed,
         function(snapshot){
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100 ;
-        console.log('Upload is '+ progress + '% done');
-        switch (snapshot.state) {
-            case firebase.storage.TaskState.paused:
-                console.log('Upload is paused');
-                break;
-            case firebase.storage.TaskState.running:
-                console.log('Upload is running');
-                break;
-        }
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100 ;
+            console.log('Upload is '+ progress + '% done');
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.paused:
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.running:
+                    console.log('Upload is running');
+                    break;
+            }
         }, function(error) {
-        switch (error.code) {
-            case 'storage/unauthorized':
-                break
-            case 'storage/canceled':
-                break
-        }
+            switch (error.code) {
+                case 'storage/unauthorized':
+                    break
+                case 'storage/canceled':
+                    break
+            }
         }, function (){
-        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
-            console.log('File available at', downloadURL)
-        })
+            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
+                console.log('File available at', downloadURL)
+            })
         })
 }
 
 
 export {
     writePost,
+    writePostWithID,
     getPost,
     deletePost,
     writeComments,

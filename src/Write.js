@@ -23,12 +23,14 @@ import {
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import theme from './theme';
-import { writePost } from "./Api";
+import {writePost, writePostWithID} from "./Api";
 import {useEffect, useState} from 'react';
-import {auth, timestamp, fstorage, firebaseConfig, firebaseApp} from "./firebase";
+import {auth, timestamp, fstorage, firebaseConfig, firebaseApp, firestore} from "./firebase";
 import ReactFirebaseImageUploader from "react-firebase-image-upload-control";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
-
+ 
 export default function Write() {
     const classes = useStyles();
 
@@ -39,6 +41,7 @@ export default function Write() {
     const [login, setLogin] = useState(undefined);
     const [file, setFile] = useState(null);
     const [location, setLocation] = useState('');
+    const [id, setID] = useState('');
 
 
     useEffect(() => {
@@ -55,14 +58,20 @@ export default function Write() {
         });
     })
 
+    useEffect(() => {
+        const ref = firestore.collection('post').doc();
+        setID(ref.id);
+    }, [])
+
     const handleWrite = (e) => {
         e.preventDefault();
-        console.log(title,body,name,timestamp,location)
-        writePost('post', {title: title, body: body, author: name, createdAt: timestamp, location: location });
+        writePostWithID(id,'post', {title: title, body: body, author: name, createdAt: timestamp, location: location });
+        //writePost('post', {title: title, body: body, author: name, createdAt: timestamp, location: location });
         setTimeout(() => {window.location.href='/'}, 1000);
     }
 
     const handleClick = () => {
+        console.log(id);
         console.log('You clicked a breadcrumb.');
     }
 
@@ -174,12 +183,14 @@ export default function Write() {
                         </FormControl>
                     </div>
                     <div style={{ width: "80%" }}>
+                        <Typography>이미지 업로드</Typography>
                         <ReactFirebaseImageUploader
                             firebaseApp={firebaseApp}
-                            storageFolder="rfiu-test"
+                            storageFolder={id}
                             checkboxControl={Checkbox}
                             buttonControl={Button}
                             uploadButtonIcon={CloudUpload}
+                            progressControl={CircularProgressbar}
                             removeButtonIcon={Delete}
                             options={{
                                 styles: {
@@ -194,8 +205,7 @@ export default function Write() {
                             multiple
                         />
                     </div>
-
-                    <div align='right' style={{width: '80%'}}>
+                    <div align='right' style={{width: '80%', margin:'10px'}}>
                         <Button
                             component={Link}
                             to='/'
@@ -217,6 +227,7 @@ const useStyles = makeStyles(() => ({
         minWidth: 275,
         display: 'grid',
         height: '100vh',
+        margin: theme.spacing(5),
     },
     header: {
         display: 'flex',
@@ -237,7 +248,6 @@ const useStyles = makeStyles(() => ({
     box: {
         display: 'flex',
         width: '80%',
-        height: '80%',
         flexDirection: 'column',
     },
     input: {
@@ -246,11 +256,11 @@ const useStyles = makeStyles(() => ({
     button: {
 
     },
-
     formControl: {
         display: 'flex',
         width: '80%',
         height: '80%',
+        marginBottom: theme.spacing(5),
     },
     selectEmpty: {
         marginTop: theme.spacing(2),
